@@ -2,9 +2,9 @@ rm(list = ls())
 file = "D:/NvTomus InDemonic/Trabajos/JTorrejon/2016/reportePerico2/data/perico2.csv"
 
 #Lectura de datos
-desembarque = getData(file, type = "landings", toTons = T)
+desembarque = getData(file, type = "landings", toTons = TRUE)
 esfuerzo = getData(file, type = "effort")
-cpue = getData(file, type = "cpue", toTons = T)
+cpue = getData(file, type = "cpue", toTons = TRUE)
 
 #Resumen de datos
 summary(desembarque)
@@ -12,7 +12,7 @@ summary(esfuerzo)
 summary(cpue)
 
 
-#Gr√°ficos
+#Gr·ficos
 plot(desembarque)
 plot(desembarque, start = "2016-02-15", end = "2016-03-05")
 plot(desembarque, time = "month")

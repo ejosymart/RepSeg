@@ -1,10 +1,10 @@
-.getCPUEData = function(file=file, toTons = T, ...) {
+.getCPUEData = function(file=file, toTons = TRUE, ...) {
 
   out = read.csv(file = file, na.strings = "", stringsAsFactors = FALSE)
   outCatch =  out[seq(4, length(colnames(out)), by = 2)]/ifelse(isTRUE(toTons), 1000, 1)
   outEffort = out[seq(5, length(colnames(out)), by = 2)]
-  catch = rowSums(outCatch, na.rm = T)
-  effort = rowSums(outEffort, na.rm = T)
+  catch = rowSums(outCatch, na.rm = TRUE)
+  effort = rowSums(outEffort, na.rm = TRUE)
   cpue = catch/effort
   cpue[is.infinite(cpue)] = NA
   out = data.frame(out[seq(1,3)], catch, effort, cpue)
@@ -25,8 +25,8 @@
   outPortDay = data.frame(out[seq(1,3)], outPortDay)
 
   #ByPort
-  catchPort  = colSums(outCatch, na.rm = T)
-  effortPort = colSums(outEffort, na.rm = T)
+  catchPort  = colSums(outCatch, na.rm = TRUE)
+  effortPort = colSums(outEffort, na.rm = TRUE)
   cpuePort = catchPort/effortPort
   cpuePort[is.infinite(cpuePort)] = NA
 

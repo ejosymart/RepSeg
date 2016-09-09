@@ -1,27 +1,11 @@
-.getEffortData = function(file=file, toTons = T, ...) {
-
-  out = read.csv(file = file, na.strings = "", stringsAsFactors = FALSE)
-  outEffort = out[seq(5, length(colnames(out)), by = 2)]
-  out = data.frame(out[seq(1,3)], outEffort)
-
-  ports = out[seq(4, length(colnames(out)))]
-  namesPorts = vector()
-  for(i in seq_len(ncol(ports))){
-    namesP = strsplit(x = names(ports), split = "_")[[i]][1]
-    namesPorts = c(namesPorts, namesP)
-  }
-
-  info = list(file=file, records=nrow(out),
-              months = length(rle(out$month)$values),
-              years  = length(unique(out$year)),
-              ports  = length(namesPorts))
-
-  output = list(data=out, info=info)
-  class(output) = c("effort")
-  return(output)
-}
-
-
+#' @title Método \code{summary} para objetos de clase \code{effort}.
+#'
+#' @param object Objeto de clase \code{effort}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method summary effort
 summary.effort = function(object,...) {
 
   output = list()
@@ -35,6 +19,14 @@ summary.effort = function(object,...) {
   return(output)
 }
 
+#' @title Método \code{print} para objetos de clase \code{summary.effort}.
+#'
+#' @param x Objeto de clase \code{summary.effort}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method print summary.effort
 print.summary.effort = function(x, ...) {
 
   x2=x; class(x2)='effort'
@@ -57,7 +49,14 @@ print.summary.effort = function(x, ...) {
 
 }
 
-
+#' @title Método \code{plot} para objetos de clase \code{effort}.
+#'
+#' @param x Objeto de clase \code{effort}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method plot effort
 plot.effort = function(x, time=NULL, ...) {
 
   if(is.null(time)) time="day"

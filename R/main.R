@@ -1,3 +1,18 @@
+#' @import R.utils
+#'
+#' @title Herramientas para la generación de reportes de captura, esfuerzo y CPUE
+#'
+#' @author Josymar Torrejón-Magallanes, \email{jotorrejon@imarpe.gob.pe}
+#' @name RepSeg-package
+#' @description Herramientas para la generación de reportes de captura, esfuerzo y CPUE.
+#' @aliases RepSeg-package RepSeg
+#' @docType package
+#' @keywords reportes, seguimiento, captura, esfuerzo, CPUE
+#' @exportClass landings
+#' @exportClass effort
+#' @exportClass cpue
+NULL
+
 #' getData
 #'
 #' @param file Dirección del archivo con información de capturas.

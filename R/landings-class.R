@@ -1,9 +1,25 @@
+#' @title Método \code{print} para objetos de clase \code{landings}.
+#'
+#' @param object Objeto de clase \code{landings}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method print landings
 print.landings <- function(x, ...){
   print(x$info)
 
   return(invisible())
 }
 
+#' @title Método \code{summary} para objetos de clase \code{landings}.
+#'
+#' @param object Objeto de clase \code{landings}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method summary landings
 summary.landings = function(object,...) {
 
   output = list()
@@ -17,6 +33,14 @@ summary.landings = function(object,...) {
   return(output)
 }
 
+#' @title Método \code{print} para objetos de clase \code{summary.landings}.
+#'
+#' @param x Objeto de clase \code{summary.landings}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method print summary.landings
 print.summary.landings = function(x, ...) {
 
   x2=x; class(x2)='landings'
@@ -33,11 +57,17 @@ print.summary.landings = function(x, ...) {
   cat("\nDesembarque anual:\n\n")
   print(x$years,...)
 
-  return(invisible(x))
-
+  return(invisible())
 }
 
-
+#' @title Método \code{plot} para objetos de clase \code{landings}.
+#'
+#' @param x Objeto de clase \code{landings}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method plot landings
 plot.landings = function(x, time=NULL, ...) {
 
   if(is.null(time)) time="day"

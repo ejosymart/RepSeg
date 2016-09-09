@@ -8,7 +8,7 @@ Authors@R: c(person("Josymar", "Torrejon-Magallanes", role = c("aut", "cre"), em
 Depends:
     R.utils
 Maintainer: Josymar Torrejon-Magallanes <jotorrejon@imarpe.gob.pe>
-Description: Herramientas para la generación de reportes de captura, esfuerzo y
+Description: Herramientas para la generacion de reportes de captura, esfuerzo y
     CPUE
 License: GPL (>= 2)
 LazyData: TRUE

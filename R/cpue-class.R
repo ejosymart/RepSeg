@@ -1,6 +1,11 @@
-
-
-
+#' @title Método \code{summary} para objetos de clase \code{cpue}.
+#'
+#' @param object Objeto de clase \code{cpue}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method summary cpue
 summary.cpue = function(object,...) {
 
   output = list()
@@ -15,7 +20,14 @@ summary.cpue = function(object,...) {
 
 }
 
-
+#' @title Método \code{print} para objetos de clase \code{summary.cpue}.
+#'
+#' @param x Objeto de clase \code{summary.cpue}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method print summary.cpue
 print.summary.cpue = function(x, ...) {
 
   x2=x; class(x2)='cpue'
@@ -36,7 +48,14 @@ print.summary.cpue = function(x, ...) {
 
 }
 
-
+#' @title Método \code{plot} para objetos de clase \code{cpue}.
+#'
+#' @param x Objeto de clase \code{cpue}.
+#' @param ... Argumentos extra.
+#'
+#' @export
+#'
+#' @method plot cpue
 plot.cpue = function(x, time=NULL, ...) {
 
   if(is.null(time)) time="day"

@@ -1,73 +1,96 @@
+.getEffortData = function(file=file, toTons = TRUE, ...) {
+
+  out = read.csv(file = file, na.strings = "", stringsAsFactors = FALSE)
+  outEffort = out[seq(5, length(colnames(out)), by = 2)]
+  out = data.frame(out[seq(1,3)], outEffort)
+
+  ports = out[seq(4, length(colnames(out)))]
+  namesPorts = vector()
+  for(i in seq_len(ncol(ports))){
+    namesP = strsplit(x = names(ports), split = "_")[[i]][1]
+    namesPorts = c(namesPorts, namesP)
+  }
+
+  info = list(file=file, records=nrow(out),
+              months = length(rle(out$month)$values),
+              years  = length(unique(out$year)),
+              ports  = length(namesPorts))
+
+  output = list(data=out, info=info)
+  class(output) = c("effort")
+  return(output)
+}
+
 .getSumPorts.effort = function (object, ...) {
-  
+
   datos = object$data
   ports = cbind(datos[, seq(4, length(colnames(datos)))])
-  
-  tabla = data.frame(datos[, c(1:3)], apply(ports, 1, sum, na.rm = T))
+
+  tabla = data.frame(datos[, c(1:3)], apply(ports, 1, sum, na.rm = TRUE))
   colnames(tabla) = c("year", "month", "day", "Ports")
-  
+
   return(tabla)
-} 
+}
 
 .getPorts.effort = function (object, ...) {
-  
+
   datos = object$data
-  
+
   ports = datos[seq(4, length(colnames(datos)))]
   namesPorts = vector()
   for(i in seq_len(ncol(ports))){
     namesP = strsplit(x = names(ports), split = "_")[[i]][1]
     namesPorts = c(namesPorts, namesP)
   }
-  
-  tabla = data.frame(apply(ports,2,sum, na.rm = T), row.names=NULL)
+
+  tabla = data.frame(apply(ports,2,sum, na.rm = TRUE), row.names=NULL)
   colnames(tabla) = "Effort"
-  rownames(tabla) = capitalize(namesPorts) 
-  
+  rownames(tabla) = capitalize(namesPorts)
+
   return(tabla)
 }
 
 .getMonth.effort = function (object, ...) {
-  
+
   datos = object$data
-  
+
   ports = datos[seq(4, length(colnames(datos)))]
   months = unique(datos$month)
   years = unique(datos$year)
-  
-  datos = data.frame(datos[, c(1:3)], apply(ports, 1, sum, na.rm = T))
+
+  datos = data.frame(datos[, c(1:3)], apply(ports, 1, sum, na.rm = TRUE))
   colnames(datos) = c("year", "month", "day", "Ports")
-  
+
   tabla = tapply(datos$Ports, list(datos$month, datos$year),
                  sum, na.remove=FALSE)
-  
+
   monthsTable = row.names(tabla)
   sortMonth = sort(match(monthsTable, months), decreasing=FALSE)
   order = months[sortMonth]
-  
+
   tabla = data.frame(tabla[order, ])
   rownames(tabla) = months
   colnames(tabla) = years
-  
-  return(tabla)  
+
+  return(tabla)
 }
 
 .getYear.effort= function (object, ...) {
-  
+
   datos = object$data
-  
+
   ports = datos[seq(4, length(colnames(datos)))]
-  
-  datos = data.frame(datos[, c(1:3)], apply(ports, 1, sum, na.rm = T))
+
+  datos = data.frame(datos[, c(1:3)], apply(ports, 1, sum, na.rm = TRUE))
   colnames(datos) = c("year", "month", "day", "Ports")
-  
+
   years = unique(datos$year)
-  
+
   tabla = tapply(datos$Ports, list(datos$year), sum, na.remove=FALSE)
   tabla = data.frame(tabla)
   colnames(tabla) = "Effort"
   rownames(tabla) = years
-  
+
   return(tabla)
 }
 
@@ -79,18 +102,18 @@
   dataDate = paste(datos$year,"-",match(months, tolower(month.abb)), "-",datos$day,sep="")
   SumPorts = .getSumPorts.effort(x)
   data = data.frame(dataDate, SumPorts)
-  
+
   data$date = as.Date(as.character(data$dataDate), format="%Y-%m-%d")
   data = subset(data, data$date >= as.Date(start) & data$date <= as.Date(end))
-  
+
   dataDate = strptime(data$date, format="%Y-%m-%d")
   years = format(dataDate, "%Y")
   months = data$month
   days = format(dataDate, "%d")
-  
+
   tabla = data.frame(years, months, days, data$Ports)
   names(tabla) = c("year", "month", "day", "Ports")
-  
+
   return(tabla)
 }
 
@@ -107,9 +130,9 @@
   daysToPlot = c(1,8,15,22) #dias que seran ploteados
   daysToPlot = which(as.numeric(datos$day) %in% daysToPlot) #posicion de los dias que seran ploteados
   daysToPlot = days[daysToPlot] #formato de los dias que seran ploteados
-  
+
   days[! days %in% daysToPlot] = NA
-  
+
   if(is.null(main)) main="Esfuerzo Diario"
   if(is.null(xlab)) xlab="D\u{ED}a"
   if(is.null(ylab)) ylab="Numero de viajes"
@@ -121,13 +144,13 @@
   axis(1, at=AxisDate[NonNa], labels=days[NonNa], las=2,cex.axis=0.7)
   axis(2, las=2, cex.axis=0.7)
   box()
-  
+
   return(invisible())
-  
+
 }
 
 .plotMonths.effort = function (x, main=NULL, xlab=NULL, ylab=NULL, col = "blue", ...) {
-  
+
   datos = .getMonth.effort(x)
   years = as.numeric(colnames(datos))
   monthPlot = NULL
@@ -137,7 +160,7 @@
   }
   monthPlot = monthPlot[!is.na(monthPlot)]
   namesMonthPlot = capitalize(rep(rownames(datos), length.out = length(monthPlot) ))
-  
+
   if(is.null(main)) main="Esfuerzo Mensual"
   if(is.null(xlab)) xlab="Mes"
   if(is.null(ylab)) ylab="Numero de viajes"
@@ -150,16 +173,16 @@
        labels=rep(years,each=12)[1:length(monthPlot)], las=1, cex.axis=0.8, line=1, tick=FALSE)
   axis(2, las=2, cex.axis=0.8)
   box()
-  
+
   return(invisible())
-  
+
 }
 
 .plotYears.effort = function (x, main=NULL, xlab=NULL, ylab=NULL, col = "blue", ...) {
-  
+
   datos = .getYear.effort(x)
   years = as.numeric(rownames(datos))
-  
+
   if(is.null(main)) main="Esfuerzo Anuales"
   if(is.null(xlab)) xlab="A\u{F1}o"
   if(is.null(ylab)) ylab="Numero de viajes"
@@ -170,9 +193,9 @@
        cex.axis=0.8)
   axis(2, las=2, cex.axis=0.8)
   box()
-  
+
   return(invisible())
-  
+
 }
 
 
@@ -181,7 +204,7 @@
   months = datos$month
   monthsPosition = unique(months)
   dataDate = paste(datos$year, "-", match(months, tolower(month.abb)), "-", datos$day, sep = "")
-  
+
   ports = datos[seq(4, length(colnames(datos)))]
   namesPorts = vector()
   for(i in seq_len(ncol(ports))){
@@ -189,22 +212,22 @@
     namesPorts = c(namesPorts, namesP)
   }
   colnames(ports) = namesPorts
-  
+
   data = data.frame(dataDate, ports)
   data$date = as.Date(as.character(data$dataDate), format="%Y-%m-%d")
   data = subset(data, data$date >= as.Date(start) & data$date <= as.Date(end))
   data = data[, c("date", puerto)]
-  
+
   dataDate = strptime(data$date, format="%Y-%m-%d")
   years = format(dataDate, "%Y")
   months = format(dataDate, "%m")
   days = format(dataDate, "%d")
-  
+
   tabla = data.frame(years, months, days, data[, puerto])
   names(tabla) = c("year", "month", "day", puerto)
-  
+
   return(tabla)
-} 
+}
 
 .plotPort.effort = function (x, start=NULL, end=NULL, main=NULL, xlab=NULL, ylab=NULL, puerto=NULL, col = "blue", ...) {
   if(is.null(start) & is.null(end)){
@@ -219,9 +242,9 @@
   daysToPlot = c(1,8,15,22) #dias que seran ploteados
   daysToPlot = which(as.numeric(datos$day) %in% daysToPlot) #posicion de los dias que seran ploteados
   daysToPlot = days[daysToPlot] #formato de los dias que seran ploteados
-  
+
   days[! days %in% daysToPlot] = NA
-  
+
   if(is.null(main)) main="Esfuerzo Diario"
   if(is.null(xlab)) xlab="D\u{ED}a"
   if(is.null(ylab)) ylab="Viajes"
@@ -233,7 +256,7 @@
   axis(1, at=AxisDate[NonNa], labels=days[NonNa], las=2,cex.axis=0.7)
   axis(2, las=2, cex.axis=0.7)
   box()
-  
+
   return(invisible())
-  
+
 }
