@@ -26,7 +26,7 @@ cómo se generarán las figuras dependerá de cada clase.
 }
 \examples{
 \dontrun{
-getData(file = "D:/datosperico.csv", type = "effort")
+getData(file = "file.csv", type = "effort")
 }
 }
 

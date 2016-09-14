@@ -29,7 +29,7 @@ NULL
 #'
 #' @examples
 #' \dontrun{
-#' getData(file = "D:/datosperico.csv", type = "effort")
+#' getData(file = "file.csv", type = "effort")
 #' }
 getData = function(file, type, toTons, ...){
   output = switch(tolower(type),

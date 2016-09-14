@@ -165,7 +165,9 @@
     monthPlot = c(monthPlot, monthPort)
   }
   monthPlot = monthPlot[!is.na(monthPlot)]
-  namesMonthPlot = capitalize(rep(rownames(datos), length.out = length(monthPlot) ))
+  namesMonthPlot1 = capitalize(rep(rownames(datos), length.out = length(monthPlot)))
+  namesMonthPlot2 = c("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
+  namesMonthPlot  = namesMonthPlot2[seq_along(namesMonthPlot1)]
 
   if(is.null(main)) main="Desembarques Mensuales"
   if(is.null(xlab)) xlab="Mes"
