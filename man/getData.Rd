@@ -7,7 +7,7 @@
 getData(file, type, toTons, ...)
 }
 \arguments{
-\item{file}{Nombre del archivo coninformación de captura y cpue.}
+\item{file}{Nombre del archivo con información de captura y cpue.}
 
 \item{type}{Definir si se desea obtener estadísticos de Desembarques (\code{landings}),
 Esfuerzo (\code{effort}) o CPUE (\code{cpue}).}
