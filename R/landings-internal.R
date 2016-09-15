@@ -160,14 +160,13 @@
   datos <- .getMonth.landings(x)
   years <- as.numeric(colnames(datos))
   monthPlot <- NULL
-  for(i in 1:length(years) ) {
+  for(i in 1:length(years)){
     monthPort <- datos[,i]
     monthPlot <- c(monthPlot, monthPort)
   }
   monthPlot <- monthPlot[!is.na(monthPlot)]
-  namesMonthPlot1 <- capitalize(rep(rownames(datos), length.out = length(monthPlot)))
-  namesMonthPlot2 <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
-  namesMonthPlot  <- namesMonthPlot2[seq_along(namesMonthPlot1)]
+  namesMonth <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
+  namesMonthPlot  <- capitalize(rep(namesMonth, length.out = length(monthPlot)))
 
   if(is.null(main)) main="Desembarques Mensuales"
   if(is.null(xlab)) xlab="Mes"

@@ -1,4 +1,5 @@
 rm(list = ls())
+
 file = "data_ejemplo.csv"
 
 #Lectura de datos

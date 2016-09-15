@@ -95,7 +95,7 @@ getTable <- function(data){
   SumValues    <- NULL
   for(i in seq_len(ncol(dataTable))){
     values       <- round(dataTable[[i]])
-    sum_Values   <- sum(values)
+    sum_Values   <- sum(values, na.rm = T)
     Values       <- cbind(Values, values)
     SumValues    <- cbind(SumValues, sum_Values)
   }
@@ -104,7 +104,8 @@ getTable <- function(data){
                     "Septiembre", "Octubre", "Noviembre", "Diciembre", "Total (t)")
 
   if(length(row_Names) != length(c(Values[,1], SumValues[,1]))){
-    fakeValues <- cbind(rep("-", length(row_Names) - length(c(Values[,1], SumValues[,1]))))
+    fakeValues <- matrix(rep("-", length(row_Names) - length(c(Values[,1], SumValues[,1]))),
+                         ncol = ncol(Values), nrow = 2*nrow(Values))
     Total <- rbind(Values, fakeValues, SumValues)
   }else{
     Total <- rbind(Values, SumValues)
