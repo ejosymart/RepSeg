@@ -12,6 +12,8 @@ cpue = getData(file, type = "cpue", toTons = TRUE)
 #Tablas
 getTable(desembarque)
 
+getTable(esfuerzo)
+
 #Gráficos
 plot(desembarque, time = "month", main = "")
 

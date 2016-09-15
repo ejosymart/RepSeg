@@ -91,34 +91,17 @@ convertBase <- function(file = file, sp, tipo, nameFileOut,...){
 getTable <- function(data){
   data_summary <- summary(data)
   dataTable    <- data_summary[[3]]
-  Values       <- NULL
-  SumValues    <- NULL
-  for(i in seq_len(ncol(dataTable))){
-    values       <- round(dataTable[[i]])
-    sum_Values   <- sum(values, na.rm = T)
-    Values       <- cbind(Values, values)
-    SumValues    <- cbind(SumValues, sum_Values)
-  }
 
-  row_Names    <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
-                    "Septiembre", "Octubre", "Noviembre", "Diciembre", "Total (t)")
+  outTable     <- rbind(dataTable, total = colSums(dataTable))
+  row.names(outTable) <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                           "Septiembre", "Octubre", "Noviembre", "Diciembre", "Total (t)")
 
-  if(length(row_Names) != length(c(Values[,1], SumValues[,1]))){
-    fakeValues <- matrix(rep("-", length(row_Names) - length(c(Values[,1], SumValues[,1]))),
-                         ncol = ncol(Values), nrow = 2*nrow(Values))
-    Total <- rbind(Values, fakeValues, SumValues)
-  }else{
-    Total <- rbind(Values, SumValues)
-  }
-
-  outTable      <- data.frame(Mes = row_Names, Total = Total,
-                              stringsAsFactors = FALSE)
   if(class(data) == "effort"){
-    colnames(outTable) <- c("Mes", colnames(dataTable))
-    outTable$Mes[13] = "Total"
+    row.names(outTable)[13] = "Total"
   }else{
-    colnames(outTable) <- c("Mes", colnames(dataTable))
+    outTable
   }
+
   return(outTable)
 }
 
