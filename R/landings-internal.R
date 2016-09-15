@@ -1,6 +1,6 @@
 .getLandingsData <- function(file = file, toTons = TRUE, ...) {
 
-  out <- read.csv(file = file, na.strings = "", stringsAsFactors = FALSE)
+  out <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   out[is.na(out)] <-  0
 
   out1 <- out[c(1:3)]

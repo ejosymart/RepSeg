@@ -1,6 +1,6 @@
 .getCPUEData <- function(file=file, toTons = TRUE, ...) {
 
-  out       <- read.csv(file = file, na.strings = "", stringsAsFactors = FALSE)
+  out       <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   outCatch  <- out[seq(4, length(colnames(out)), by = 2)]/ifelse(isTRUE(toTons), 1000, 1)
   outEffort <- out[seq(5, length(colnames(out)), by = 2)]
   catch     <- rowSums(outCatch, na.rm = TRUE)

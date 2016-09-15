@@ -1,6 +1,6 @@
 .getEffortData <- function(file=file, toTons = TRUE, ...) {
 
-  out <- read.csv(file = file, na.strings = "", stringsAsFactors = FALSE)
+  out <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   outEffort <- out[seq(5, length(colnames(out)), by = 2)]
   out <- data.frame(out[seq(1,3)], outEffort)
 
