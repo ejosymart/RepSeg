@@ -1,5 +1,5 @@
 rm(list = ls())
-file = "../data_ejemplo.csv"
+file = "data_ejemplo.csv"
 
 #Lectura de datos
 desembarque = getData(file, type = "landings", toTons = TRUE)
