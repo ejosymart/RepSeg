@@ -11,4 +11,7 @@
 
 \item{...}{Argumentos extra.}
 }
+\value{
+Esfuerzo diario, mensual, anual y por puertos.
+}
 

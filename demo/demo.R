@@ -1,5 +1,5 @@
 rm(list = ls())
-file = "../../reportePerico2/data/perico2.csv"
+file = "../data_ejemplo.csv"
 
 #Lectura de datos
 desembarque = getData(file, type = "landings", toTons = TRUE)
@@ -11,8 +11,6 @@ cpue = getData(file, type = "cpue", toTons = TRUE)
 #Tablas
 getTable(desembarque)
 
-getTablaCuota(desembarque, cuota = 10000)
-
 #Gráficos
 plot(desembarque, time = "month", main = "")
 
@@ -20,7 +18,4 @@ plot(esfuerzo, time = "month", main = "")
 
 plot(cpue, time = "month", main = "")
 
-sp <- list("Engraulis ringens", "anchoveta", "anchovy", "anchoveta", "12 cm", "Red de cerco")
-names(sp) <- c("NombreCie", "NombreCom", "NombreIng", "NombreFAO", "TallaMin", "ArtePesca")
-
-makeReport(desembarque, sp = sp)
+makeReport(desembarque = desembarque)

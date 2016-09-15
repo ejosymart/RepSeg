@@ -7,12 +7,13 @@
 getData(file, type, toTons, ...)
 }
 \arguments{
-\item{file}{Dirección del archivo con información de capturas.}
+\item{file}{Nombre del archivo coninformación de captura y cpue.}
 
 \item{type}{Definir si se desea obtener estadísticos de Desembarques (\code{landings}),
 Esfuerzo (\code{effort}) o CPUE (\code{cpue}).}
 
-\item{toTons}{¿Desea tranformar los valores a toneladas? (\code{TRUE} or \code{FALSE}).}
+\item{toTons}{Para convertir los valores a toneladas (\code{TRUE} or \code{FALSE}).
+Solo para desembarques (\code{landings}) y cpue (\code{cpue}).}
 
 \item{...}{Argumentos extras.}
 }

@@ -2,10 +2,10 @@
 % Please edit documentation in R/main.R
 \name{makeReport}
 \alias{makeReport}
-\title{Función que construye el reporte de seguimiento y lo exporta en formato pdf.}
+\title{Función que construye el reporte de seguiumiento}
 \usage{
-makeReport(desembarque, filename = NULL, openAtEnd = TRUE, paper = "USr",
-  width = 10, height = 10, sp = NULL, ...)
+makeReport(desembarque, filename = NULL, openAtEnd = TRUE, paper = "a4r",
+  width = 10, height = 10, ...)
 }
 \arguments{
 \item{desembarque}{Objeto de clase \code{landings} de donde se obtendrán los datos de
@@ -17,35 +17,15 @@ que se mostrará al final.}
 \item{openAtEnd}{¿Desea abrir el archivo al final del proceso? Si \code{filename = NULL}, este parámetro
 no se tomará en cuenta.}
 
-\item{paper}{Argumento pasado desde la función \code{\link{pdf}}.}
-
-\item{width}{Argumento pasado desde la función \code{\link{pdf}}.}
-
-\item{height}{Argumento pasado desde la función \code{\link{pdf}}.}
-
-\item{sp}{Argumento con información sobre especie. Si es \code{NULL}, se tomará la especie incluída
-en el argumento \code{desembarque}. Ver detalles abajo.}
-
 \item{...}{Argumentos extra pasados a la función \code{pdf}.}
 }
 \description{
-Función que construye el reporte de seguimiento y lo exporta en formato pdf.
-}
-\details{
-El argumento \code{sp} puede ser indicado de dos maneras: 1. Si es dejado como \code{NULL} (por
-defecto), se tomará desde la sección \code{info} dentro del objeto \code{desembarque}; 2. si el usuario
-desea indicar manualmente la información de la especie, puede hacerlo mediante una lista cuyos elementos
-sean NombreCie (nombre científico), NombreCom (nombre común), NombreIng (nombre en inglés), NombreFAO
-(nombre FAO), TallaMin (talla mínima) y ArtePesca (arte de pesca). Un ejemplo de cómo crear una lista
-con información de especies es mostrado abajo, en los ejemplos.
+Función que construye el reporte de seguiumiento
 }
 \examples{
 \dontrun{
 desembarque <- getData(file = "file.csv", type = "effort")
 makeReport(desembarque)
 }
-
-sp <- list(NombreCie = "Engraulis ringens", NombreCom = "anchoveta", NombreIng = "anchovy",
-           NombreFAO = "anchoveta", TallaMin = "12 cm", ArtePesca = "Red de cerco")
 }
 

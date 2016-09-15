@@ -11,4 +11,7 @@
 
 \item{object}{Objeto de clase \code{landings}.}
 }
+\value{
+Información básica en la base de datos: Número de registros, meses, años, número de puertos.
+}
 

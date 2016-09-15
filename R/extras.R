@@ -1,109 +1,82 @@
-.getCalendar = function(year = NULL, ...){
-  ndays   = NULL
-  nmonths = NULL
-  nyears  = NULL
+#' Title Calendario
+#'
+#' @param year
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+.getCalendar <- function(year = NULL, ...){
+  ndays   <- NULL
+  nmonths <- NULL
+  nyears  <- NULL
   for(j in seq_along(year)){
     for(i in 1:12){
-      fecha   = paste(year[j], "-", i, "-01", sep = "")
-      xdays   = 1:monthDays(as.Date(fecha))
-      ndays   = c(ndays, xdays)
-      xmonth  = monthDays(as.Date(fecha))
-      ymonth  = rep(i, xmonth)
-      nmonths = c(nmonths, ymonth)
+      fecha   <- paste(year[j], "-", i, "-01", sep = "")
+      xdays   <- 1:monthDays(as.Date(fecha))
+      ndays   <- c(ndays, xdays)
+      xmonth  <- monthDays(as.Date(fecha))
+      ymonth  <- rep(i, xmonth)
+      nmonths <- c(nmonths, ymonth)
     }
-    xyears = yearDays(as.Date(fecha))
-    yyears = rep(year[j], xyears)
-    nyears = c(nyears, yyears)
+    xyears <- yearDays(as.Date(fecha))
+    yyears <- rep(year[j], xyears)
+    nyears <- c(nyears, yyears)
   }
   return(data.frame(anho = nyears, mes = nmonths, dia = ndays))
 }
 
 
-convertBase = function(file = file, sp, tipo, nameFileOut,...){
-  base = read.csv(file = file, na.strings = "")
-  colnames(base) = tolower(colnames(base))
-  base = base[base$especie == sp & base$tipo_flota == tipo, ]
-  base$embarcaciones[is.na(base$embarcaciones)] = 1
+#' Title Convertir base de datos
+#'
+#' @param file
+#' @param sp nombre de la especie
+#' @param tipo Tipo de flota o arte
+#' @param nameFileOut Nombre con el cual el archivo será guardado
+#' @param ... Argumentos extras
+#'
+#' @return Base de datos con el formato de captura y esfuerzo
+#' @export
+#'
+#' @examples
+convertBase <- function(file = file, sp, tipo, nameFileOut,...){
+  base           <- read.csv(file = file, na.strings = "")
+  colnames(base) <- tolower(colnames(base))
+  base           <- base[base$especie == sp & base$tipo_flota == tipo, ]
 
-  if(mean(base$embarcaciones) == 1){
-    catch  = aggregate(captura ~ dia + mes + anho + puerto, data = base, FUN = sum)
-    effort = aggregate(puerto ~ dia + mes + anho + puerto, data = base, FUN = table)
+  catch  <- aggregate(captura ~ dia + mes + anho + puerto, data = base, FUN = sum)
+  effort <- aggregate(puerto ~ dia + mes + anho + puerto, data = base, FUN = table)
 
-    effort1 = effort[, 1:3]
-    effort2 = as.data.frame(effort$puerto)
-    effort  = data.frame(effort1, effort2)
-    effort  = effort[,which(!apply(effort,2,FUN = function(x){all(x == 0)}))]
+  effort1 <- effort[, 1:3]
+  effort2 <- as.data.frame(effort$puerto)
+  effort  <- data.frame(effort1, effort2)
+  effort  <- effort[, which(!apply(effort, 2, FUN = function(x){all(x == 0)}))]
 
-    puerto = unique(catch$puerto)
+  puerto  <- unique(catch$puerto)
 
-    baseCatch = list()
-    for(i in seq_along(puerto)){
-      catchPort = catch[catch$puerto == puerto[i], ]
-      newBase = .getCalendar(unique(catch$anho))
-      catchPort = merge(newBase, catchPort, all=TRUE)
-      Date = catchPort[, 1:3]
-      Date$mes = tolower(month.abb[Date$mes])
-      colnames(Date) = c("year", "month", "day")
-      baseCatch[[i]] = data.frame(catchPort[, "captura"])
-      colnames(baseCatch[[i]]) = c(paste(as.character(puerto[i]),"_c", sep = ""))
-      frameCatch = do.call("cbind", baseCatch)
-      frameEffort = merge(newBase, effort, all = TRUE)
-      frameEffort = cbind(frameEffort[, -c(1:3)])
-      colnames(frameEffort) = paste(as.character(puerto),"_e", sep = "")
-      catcheffort = data.frame(frameCatch, frameEffort)
-      catcheffort = catcheffort[, order(names(catcheffort))]
-      output = data.frame(Date, catcheffort)
-      output[is.na(output)] = 0
-      out = write.csv(x = output, nameFileOut, row.names = F)
-    }
-  }else{
-    base = base[rep(row.names(base), base$embarcaciones), (1:ncol(base))]
-    base$captura = base$captura/base$embarcaciones
-
-    catch  = aggregate(captura ~ dia + mes + anho + puerto, data = base, FUN = sum)
-    effort = aggregate(puerto ~ dia + mes + anho + puerto, data = base, FUN = table)
-
-    effort1 = effort[, 1:3]
-    effort2 = as.data.frame(effort$puerto)
-    effort  = data.frame(effort1, effort2)
-    effort  = effort[,which(!apply(effort,2,FUN = function(x){all(x == 0)}))]
-
-    puerto = unique(catch$puerto)
-
-    baseCatch = list()
-    for(i in seq_along(puerto)){
-      catchPort = catch[catch$puerto == puerto[i], ]
-      newBase = .getCalendar(unique(catch$anho))
-      catchPort = merge(newBase, catchPort, all=TRUE)
-      Date = catchPort[, 1:3]
-      Date$mes = tolower(month.abb[Date$mes])
-      colnames(Date) = c("year", "month", "day")
-      baseCatch[[i]] = data.frame(catchPort[, "captura"])
-      colnames(baseCatch[[i]]) = c(paste(as.character(puerto[i]),"_c", sep = ""))
-      frameCatch = do.call("cbind", baseCatch)
-      frameEffort = merge(newBase, effort, all = TRUE)
-      frameEffort = cbind(frameEffort[, -c(1:3)])
-      colnames(frameEffort) = paste(as.character(puerto),"_e", sep = "")
-      catcheffort = data.frame(frameCatch, frameEffort)
-      catcheffort = catcheffort[, order(names(catcheffort))]
-      output = data.frame(Date, catcheffort)
-      output[is.na(output)] = 0
-      out = write.csv(x = output, nameFileOut, row.names = F)
-    }
+  baseCatch <- list()
+  for(i in seq_along(puerto)){
+    catchPort      <- catch[catch$puerto == puerto[i], ]
+    newBase        <- .getCalendar(unique(catch$anho))
+    catchPort      <- merge(newBase, catchPort, all = TRUE)
+    Date           <- catchPort[, 1:3]
+    Date$mes       <- tolower(month.abb[Date$mes])
+    colnames(Date) <- c("year", "month", "day")
+    baseCatch[[i]] <- data.frame(catchPort[, "captura"])
+    colnames(baseCatch[[i]]) <- c(paste(as.character(puerto[i]),"_c", sep = ""))
+    frameCatch     <- do.call("cbind", baseCatch)
+    frameEffort    <- merge(newBase, effort, all = TRUE)
+    frameEffort    <- cbind(frameEffort[, -c(1:3)])
+    colnames(frameEffort) <- paste(as.character(puerto),"_e", sep = "")
+    catcheffort    <- data.frame(frameCatch, frameEffort)
+    catcheffort    <- catcheffort[, order(names(catcheffort))]
+    output         <- data.frame(Date, catcheffort)
+    output[is.na(output)] <- 0
+    out            <- write.csv(x = output, nameFileOut, row.names = F)
   }
 
-  return(list(base=base, newbase = output))
-}
-
-checkSP <- function(sp){
-
-  mustHave <- c("NombreCie", "NombreCom", "NombreIng", "NombreFAO", "TallaMin", "ArtePesca")
-
-  if(class(sp) != "list" || !all(is.element(names(sp), mustHave))){
-    stop("'sp' debe ser una lista con los objetos '", paste(mustHave, collapse = "', '"), "'.")
-  }
-
-  return(TRUE)
+  return(list(base = base, newbase = output))
 }
 
 
@@ -118,48 +91,33 @@ checkSP <- function(sp){
 getTable <- function(data){
   data_summary <- summary(data)
   dataTable    <- data_summary[[3]]
-  values       <- round(dataTable[[1]])
-  sum_Values   <- sum(values)
+  Values       <- NULL
+  SumValues    <- NULL
+  for(i in seq_len(ncol(dataTable))){
+    values       <- round(dataTable[[i]])
+    sum_Values   <- sum(values)
+    Values       <- cbind(Values, values)
+    SumValues    <- cbind(SumValues, sum_Values)
+  }
+
   row_Names    <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
                     "Septiembre", "Octubre", "Noviembre", "Diciembre", "Total (t)")
 
-  if(length(row_Names) != length(c(values, sum_Values))){
-    fake_Values <- rep("-", length(row_Names)-length(c(values, sum_Values)))
-    Total <- c(values, fake_Values, sum_Values)
+  if(length(row_Names) != length(c(Values[,1], SumValues[,1]))){
+    fakeValues <- cbind(rep("-", length(row_Names) - length(c(Values[,1], SumValues[,1]))))
+    Total <- rbind(Values, fakeValues, SumValues)
   }else{
-    Total <- c(values, sum_Values)
+    Total <- rbind(Values, SumValues)
   }
 
   outTable      <- data.frame(Mes = row_Names, Total = Total,
                               stringsAsFactors = FALSE)
-  if(class(data) == "landings"){
-    colnames(outTable) <- c("Mes", "TOTAL (t)")
+  if(class(data) == "effort"){
+    colnames(outTable) <- c("Mes", colnames(dataTable))
+    outTable$Mes[13] = "Total"
   }else{
-    colnames(outTable) <- c("Mes", "N° viajes")
+    colnames(outTable) <- c("Mes", colnames(dataTable))
   }
   return(outTable)
 }
 
-
-#' Title
-#'
-#' @param data
-#' @param cuota
-#'
-#' @return
-#' @export
-#'
-#' @examples
-getTablaCuota  <- function(data, cuota){
-  data_summary <- summary(data)
-  value        <- data_summary[[4]][[1]]
-  fecha_final  <- paste("Total al", tail(data_summary[[1]], 1)[[3]], tail(data_summary[[1]], 1)[[2]], sep = " ")
-  diff         <- cuota - value
-  row_Names    <- c("Cuota", fecha_final, "Remanente")
-  outTable     <- data.frame(Lim_Cap = row_Names,
-                             Toneladas = c(cuota, value, cuota-value),
-                             Porcentaje = c(round(cuota/cuota*100), round(value/cuota*100, 2), round((cuota-value)/cuota*100,2)),
-                             stringsAsFactors = FALSE)
-  colnames(outTable) <- c("Límite de Captura", "Toneladas", "Porcentaje (%)")
-  return(outTable)
-}

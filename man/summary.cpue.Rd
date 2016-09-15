@@ -11,4 +11,7 @@
 
 \item{...}{Argumentos extra.}
 }
+\value{
+CPUE diario, mensual, anual y por puertos.
+}
 

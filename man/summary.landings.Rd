@@ -11,4 +11,7 @@
 
 \item{...}{Argumentos extra.}
 }
+\value{
+Desembarques diarios, mensual, anual y por puertos.
+}
 

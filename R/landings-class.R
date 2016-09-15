@@ -2,7 +2,7 @@
 #'
 #' @param object Objeto de clase \code{landings}.
 #' @param ... Argumentos extra.
-#'
+#' @return Información básica en la base de datos: Número de registros, meses, años, número de puertos.
 #' @export
 #'
 #' @method print landings
@@ -16,20 +16,20 @@ print.landings <- function(x, ...){
 #'
 #' @param object Objeto de clase \code{landings}.
 #' @param ... Argumentos extra.
-#'
+#' @return Desembarques diarios, mensual, anual y por puertos.
 #' @export
 #'
 #' @method summary landings
-summary.landings = function(object,...) {
+summary.landings <-  function(object,...) {
 
-  output = list()
+  output <-  list()
 
-  output$sumPorts = .getSumPorts.landings(object)
-  output$ports    = .getPorts.landings(object)
-  output$months   = .getMonth.landings(object)
-  output$years    = .getYear.landing(object)
+  output$sumPorts <- .getSumPorts.landings(object)
+  output$ports    <- .getPorts.landings(object)
+  output$months   <- .getMonth.landings(object)
+  output$years    <- .getYear.landing(object)
 
-  class(output) = "summary.landings"
+  class(output) <- "summary.landings"
   return(output)
 }
 
@@ -41,9 +41,9 @@ summary.landings = function(object,...) {
 #' @export
 #'
 #' @method print summary.landings
-print.summary.landings = function(x, ...) {
+print.summary.landings <- function(x, ...) {
 
-  x2=x; class(x2)='landings'
+  x2 <- x; class(x2) <- 'landings'
 
   cat("\nDesembarque por dia:\n\n")
   print(x$sumPorts)
@@ -63,14 +63,16 @@ print.summary.landings = function(x, ...) {
 #' @title Método \code{plot} para objetos de clase \code{landings}.
 #'
 #' @param x Objeto de clase \code{landings}.
+#' @param time Argumento que hace referencia al paso de tiempo para ser graficados,
+#' \code{"day"}, \code{"month"}, \code{"year"}.
 #' @param ... Argumentos extra.
 #'
 #' @export
 #'
 #' @method plot landings
-plot.landings = function(x, time=NULL, ...) {
+plot.landings <- function(x, time = NULL, ...) {
 
-  if(is.null(time)) time="day"
+  if(is.null(time)) time = "day"
   switch(time,
          day   = .plotDays.landings(x=x, ...),
          month = .plotMonths.landings(x=x, ...),
