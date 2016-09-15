@@ -1,5 +1,5 @@
 rm(list = ls())
-file = "data_ejemplo.csv"
+file = "../reportePerico2/data/perico2.csv"
 
 #Lectura de datos
 desembarque = getData(file, type = "landings", toTons = TRUE)
@@ -19,3 +19,5 @@ plot(desembarque, time = "month", main = "")
 plot(esfuerzo, time = "month", main = "")
 
 plot(cpue, time = "month", main = "")
+
+makeReport(desembarque = desembarque)

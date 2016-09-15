@@ -119,7 +119,8 @@ getTable <- function(data){
     Total <- c(values, sum_Values)
   }
 
-  outTable      <- data.frame(Mes = row_Names, Total = Total)
+  outTable      <- data.frame(Mes = row_Names, Total = Total,
+                              stringsAsFactors = FALSE)
   if(class(data) == "landings"){
     colnames(outTable) <- c("Mes", "TOTAL (t)")
   }else{
@@ -146,7 +147,8 @@ getTablaCuota  <- function(data, cuota){
   row_Names    <- c("Cuota", fecha_final, "Remanente")
   outTable     <- data.frame(Lim_Cap = row_Names,
                              Toneladas = c(cuota, value, cuota-value),
-                             Porcentaje = c(round(cuota/cuota*100), round(value/cuota*100, 2), round((cuota-value)/cuota*100,2)))
+                             Porcentaje = c(round(cuota/cuota*100), round(value/cuota*100, 2), round((cuota-value)/cuota*100,2)),
+                             stringsAsFactors = FALSE)
   colnames(outTable) <- c("Límite de Captura", "Toneladas", "Porcentaje (%)")
   return(outTable)
 }
