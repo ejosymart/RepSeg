@@ -1,12 +1,20 @@
 checkSP <- function(sp){
 
-  mustHave <- c("NombreCie", "NombreCom", "NombreIng", "NombreFAO", "TallaMin", "ArtePesca")
+  mustHave <- c("NombreCom", "NombreCie", "NombreIng", "Unidad", "TallaMin", "TipoMedicion")
 
-  if(class(sp) != "list" || !all(is.element(names(sp), mustHave))){
+  if(is.vector(sp) && length(sp) == 1 && class(sp) == "character"){
+    index <- match(tolower(sp), tolower(speciesData$NombreCom))
+
+    if(is.na(index)){
+      stop("EL nombre ingresado para la especie es incorrecto o no se encuentra en la lista predeterminada.")
+    }
+
+    sp <- as.list(speciesData[index,])
+  }else if(class(sp) != "list" || !all(is.element(names(sp), mustHave))){
     stop("'sp' debe ser una lista con los objetos '", paste(mustHave, collapse = "', '"), "'.")
   }
 
-  return(TRUE)
+  return(sp)
 }
 
 readSegFile <- function(file, ...){

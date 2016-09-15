@@ -1,4 +1,4 @@
-.getLandingsData <- function(file = file, toTons = TRUE, ...) {
+.getLandingsData <- function(file = file, toTons = TRUE, sp, ...) {
 
   out <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   out[is.na(out)] <-  0
@@ -18,7 +18,8 @@
                records = nrow(out),
                months  = length(rle(out$month)$values),
                years   = length(unique(out$year)),
-               ports   = length(namesPorts))
+               ports   = length(namesPorts),
+               sp      = sp)
 
   output <- list(data = out, info = info)
   class(output) <- c("landings")

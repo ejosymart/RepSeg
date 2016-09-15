@@ -92,7 +92,7 @@ getTable <- function(data){
   data_summary <- summary(data)
   dataTable    <- data_summary[[3]]
 
-  outTable     <- rbind(dataTable, total = colSums(dataTable))
+  outTable     <- rbind(round(dataTable, 0), total = round(colSums(dataTable), 0))
   row.names(outTable) <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
                            "Septiembre", "Octubre", "Noviembre", "Diciembre", "Total (t)")
 

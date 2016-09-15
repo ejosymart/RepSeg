@@ -33,18 +33,18 @@ NULL
 #' \dontrun{
 #' getData(file = "file.csv", type = "effort")
 #' }
-getData <-  function(file, type, toTons, ...){
+getData <-  function(file, type, toTons, sp, ...){
   output <-  switch(tolower(type),
-                    landings = .getLandingsData(file = file, toTons = toTons, ...),
-                    effort   = .getEffortData(file = file, ...),
-                    cpue     = .getCPUEData(file = file, toTons = toTons, ...),
+                    landings = .getLandingsData(file = file, toTons = toTons, sp = sp, ...),
+                    effort   = .getEffortData(file = file, sp = sp, ...),
+                    cpue     = .getCPUEData(file = file, toTons = toTons, sp = sp, ...),
                     read.csv(file = file, ...))
   return(output)
 }
 
 #' Función que construye el reporte de seguimiento y lo exporta en formato pdf.
 #'
-#' @param desembarque Objeto de clase \code{landings} de donde se obtendrán los datos de
+#' @param x Objeto de clase \code{landings} de donde se obtendrán los datos de
 #' desembarque.
 #' @param filename Archivo en donde se guardará el pdf. Si es \code{NULL}, se creará un archivo temporal
 #' que se mostrará al final.
@@ -54,11 +54,11 @@ getData <-  function(file, type, toTons, ...){
 #' @param width Argumento pasado desde la función \code{\link{pdf}}.
 #' @param height Argumento pasado desde la función \code{\link{pdf}}.
 #' @param sp Argumento con información sobre especie. Si es \code{NULL}, se tomará la especie incluída
-#' en el argumento \code{desembarque}. Ver detalles abajo.
+#' en el argumento \code{x}. Ver detalles abajo.
 #' @param ... Argumentos extra pasados a la función \code{pdf}.
 #'
 #' @details El argumento \code{sp} puede ser indicado de dos maneras: 1. Si es dejado como \code{NULL} (por
-#' defecto), se tomará desde la sección \code{info} dentro del objeto \code{desembarque}; 2. si el usuario
+#' defecto), se tomará desde la sección \code{info} dentro del objeto \code{x}; 2. si el usuario
 #' desea indicar manualmente la información de la especie, puede hacerlo mediante una lista cuyos elementos
 #' sean NombreCie (nombre científico), NombreCom (nombre común), NombreIng (nombre en inglés), NombreFAO
 #' (nombre FAO), TallaMin (talla mínima) y ArtePesca (arte de pesca). Un ejemplo de cómo crear una lista
@@ -73,34 +73,38 @@ getData <-  function(file, type, toTons, ...){
 #'
 #' sp <- list(NombreCie = "Engraulis ringens", NombreCom = "anchoveta", NombreIng = "anchovy",
 #'            NombreFAO = "anchoveta", TallaMin = "12 cm", ArtePesca = "Red de cerco")
-makeReport <- function(desembarque, filename = NULL, openAtEnd = TRUE,
+makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
                        paper = "USr", width = 10, height = 10, sp = NULL, ...){
-  x <- getTable(desembarque)
+  x <- getTable(x)
+
+  x <- data.frame(Mes = rownames(x), x, stringsAsFactors = FALSE, check.names = FALSE)
 
   if(is.null(filename)){
     filename <- paste0(tempfile(), ".pdf")
   }
 
-  checkSP(sp)
+  sp <- checkSP(desembarque$info$sp)
 
   pdf(file = filename, paper = paper, width = width, height = height, ...)
 
-  layoutMatrix <- c(1, 1, 2, 2,
+  layoutMatrix <- c(1, 2, 2, 2,
                     3, 3, 4, 4,
+                    3, 3, 4, 4,
+                    5, 5, 6, 6,
                     5, 5, 6, 6)
-  layoutMatrix <- matrix(layoutMatrix, nrow = 3, byrow = TRUE)
+  layoutMatrix <- matrix(layoutMatrix, ncol = 4, byrow = TRUE)
   layout(mat = layoutMatrix)
 
   # IMARPE logo
   par(mar = c(3, 0, 0, 0))
   plot(1, 1, xlim = c(0, 1), ylim = c(0, 1), pch = NA, axes = FALSE, xlab = NA, ylab = NA)
-  rasterImage(imarpeLogo, 0.65, 0.1, 1, 0.9)
+  rasterImage(imarpeLogo, 0.7, 0.1, 1, 0.9)
 
   # Header
   delay <- 0.01
 
-  par(mar = c(0, 5, 0, 5), xaxs = "i", yaxs = "i")
-  plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = c(0, 1), ylim = c(0, 8))
+  par(mar = c(5, 5, 3, 5), xaxs = "i", yaxs = "i")
+  plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = c(0, 1), ylim = c(4, 8))
 
   text(x = 0.5 - delay, y = 7.5, labels = "Nombre científico:", adj = 1, cex = 1.2, font = 2)
   text(x = 0.5 + delay, y = 7.5, labels = sp$NombreCie, adj = 0, cex = 1.2, font = 3)
@@ -111,20 +115,21 @@ makeReport <- function(desembarque, filename = NULL, openAtEnd = TRUE,
   text(x = 0.5 - delay, y = 5.5, labels = "Nombre en inglés:", adj = 1, cex = 1.2, font = 2)
   text(x = 0.5 + delay, y = 5.5, labels = sp$NombreIng, adj = 0, cex = 1.2, font = 1)
 
-  text(x = 0.5 - delay, y = 4.5, labels = "Nombre FAO:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 4.5, labels = sp$NombreFAO, adj = 0, cex = 1.2, font = 1)
+  # text(x = 0.5 - delay, y = 4.5, labels = "Nombre FAO:", adj = 1, cex = 1.2, font = 2)
+  # text(x = 0.5 + delay, y = 4.5, labels = sp$NombreFAO, adj = 0, cex = 1.2, font = 1)
 
-  text(x = 0.5 - delay, y = 3.0, labels = "Talla mínima de captura:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 3.0, labels = sp$TallaMin, adj = 0, cex = 1.2, font = 1)
+  text(x = 0.5 - delay, y = 4.5, labels = "Talla mínima de captura:", adj = 1, cex = 1.2, font = 2)
+  text(x = 0.5 + delay, y = 4.5, labels = paste0(sp$TallaMin, " ", sp$Unidad, " (", sp$TipoMedicion, ")"),
+       adj = 0, cex = 1.2, font = 1)
 
-  text(x = 0.5 - delay, y = 2.0, labels = "Arte de pesca:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 2.0, labels = sp$ArtePesca, adj = 0, cex = 1.2, font = 1)
+  # text(x = 0.5 - delay, y = 2.0, labels = "Arte de pesca:", adj = 1, cex = 1.2, font = 2)
+  # text(x = 0.5 + delay, y = 2.0, labels = sp$ArtePesca, adj = 0, cex = 1.2, font = 1)
 
   # Plot 1: Landing table
   xlim <- c(0, 1)
   ylim <- c(0, 14)
 
-  par(xaxs = "i", yaxs = "i", mar = c(2, 7, 3, 7))
+  par(xaxs = "i", yaxs = "i", mar = c(2, ifelse(ncol(x) > 3, 1, 7), 3, ifelse(ncol(x) > 3, 1, 7)))
   plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
 
   tableSep <- 1/(ncol(x))
@@ -141,16 +146,16 @@ makeReport <- function(desembarque, filename = NULL, openAtEnd = TRUE,
   box(lwd = 2)
 
   # Plot 2: Landin
-  par(mar = c(4, 4, 3, 1))
+  par(mar = c(4, 4, 3, 1), xaxs = "r")
   plot(desembarque, time = "month", main = "Desembarques")
 
   # Plot 3
-  par(mar = c(4, 4, 4, 1))
+  par(mar = c(4, 4, 4, 1), xaxs = "r")
   plot(esfuerzo, time = "month", main = "Esfuerzo pesquero")
 
   # Plot 4
-  par(mar = c(4, 4, 4, 1))
-  plot(cpue, time = "month", main = "CPUE (viaje)")
+  par(mar = c(4, 4, 4, 1), xaxs = "r")
+  plot(cpue, time = "month", main = "CPUE (t/viaje)")
 
   dev.off()
 

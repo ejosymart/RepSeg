@@ -1,4 +1,4 @@
-.getEffortData <- function(file=file, toTons = TRUE, ...) {
+.getEffortData <- function(file=file, toTons = TRUE, sp, ...) {
 
   out <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   outEffort <- out[seq(5, length(colnames(out)), by = 2)]
@@ -11,10 +11,11 @@
     namesPorts <- c(namesPorts, namesP)
   }
 
-  info <- list(file=file, records=nrow(out),
+  info <- list(file  = file, records=nrow(out),
               months = length(rle(out$month)$values),
               years  = length(unique(out$year)),
-              ports  = length(namesPorts))
+              ports  = length(namesPorts),
+              sp     = sp)
 
   output <- list(data=out, info=info)
   class(output) <- c("effort")

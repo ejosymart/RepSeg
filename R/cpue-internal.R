@@ -1,4 +1,4 @@
-.getCPUEData <- function(file=file, toTons = TRUE, ...) {
+.getCPUEData <- function(file=file, toTons = TRUE, sp, ...) {
 
   out       <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   outCatch  <- out[seq(4, length(colnames(out)), by = 2)]/ifelse(isTRUE(toTons), 1000, 1)
@@ -34,9 +34,10 @@
   outPort[is.na(outPort)] <- 0
   rownames(outPort) <- capitalize(namesPorts)
 
-  info <- list(file = file, records = nrow(out),
+  info <- list(file   = file, records = nrow(out),
                months = length(rle(out$month)$values),
-               years  = length(unique(out$year)))
+               years  = length(unique(out$year)),
+               sp     = sp)
 
   output <- list(data = out, dataPortDay = outPortDay, dataPort = outPort, info = info)
 

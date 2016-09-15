@@ -4,11 +4,11 @@
 \alias{makeReport}
 \title{Función que construye el reporte de seguimiento y lo exporta en formato pdf.}
 \usage{
-makeReport(desembarque, filename = NULL, openAtEnd = TRUE, paper = "USr",
+makeReport(x, filename = NULL, openAtEnd = TRUE, paper = "USr",
   width = 10, height = 10, sp = NULL, ...)
 }
 \arguments{
-\item{desembarque}{Objeto de clase \code{landings} de donde se obtendrán los datos de
+\item{x}{Objeto de clase \code{landings} de donde se obtendrán los datos de
 desembarque.}
 
 \item{filename}{Archivo en donde se guardará el pdf. Si es \code{NULL}, se creará un archivo temporal
@@ -24,7 +24,7 @@ no se tomará en cuenta.}
 \item{height}{Argumento pasado desde la función \code{\link{pdf}}.}
 
 \item{sp}{Argumento con información sobre especie. Si es \code{NULL}, se tomará la especie incluída
-en el argumento \code{desembarque}. Ver detalles abajo.}
+en el argumento \code{x}. Ver detalles abajo.}
 
 \item{...}{Argumentos extra pasados a la función \code{pdf}.}
 }
@@ -33,7 +33,7 @@ Función que construye el reporte de seguimiento y lo exporta en formato pdf.
 }
 \details{
 El argumento \code{sp} puede ser indicado de dos maneras: 1. Si es dejado como \code{NULL} (por
-defecto), se tomará desde la sección \code{info} dentro del objeto \code{desembarque}; 2. si el usuario
+defecto), se tomará desde la sección \code{info} dentro del objeto \code{x}; 2. si el usuario
 desea indicar manualmente la información de la especie, puede hacerlo mediante una lista cuyos elementos
 sean NombreCie (nombre científico), NombreCom (nombre común), NombreIng (nombre en inglés), NombreFAO
 (nombre FAO), TallaMin (talla mínima) y ArtePesca (arte de pesca). Un ejemplo de cómo crear una lista
