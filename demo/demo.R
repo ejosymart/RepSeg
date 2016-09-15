@@ -1,5 +1,5 @@
 rm(list = ls())
-file = "../reportePerico2/data/perico2.csv"
+file = "../../reportePerico2/data/perico2.csv"
 
 #Lectura de datos
 desembarque = getData(file, type = "landings", toTons = TRUE)
@@ -20,4 +20,7 @@ plot(esfuerzo, time = "month", main = "")
 
 plot(cpue, time = "month", main = "")
 
-makeReport(desembarque = desembarque)
+sp <- list("Engraulis ringens", "anchoveta", "anchovy", "anchoveta", "12 cm", "Red de cerco")
+names(sp) <- c("NombreCie", "NombreCom", "NombreIng", "NombreFAO", "TallaMin", "ArtePesca")
+
+makeReport(desembarque, sp = sp)
