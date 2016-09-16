@@ -122,8 +122,12 @@
   return(tabla)
 }
 
+engToSpa <- function(x){
+  index <- match(x, month.abb)
+  return(month.abb_spanish[index])
+}
 
-.plotDays.landings <- function (x, start=NULL, end=NULL, main=NULL, xlab=NULL, ylab=NULL, col = "blue",
+.plotDays.landings <- function (x, start = NULL, end = NULL, main = NULL, xlab = NULL, ylab = NULL, col = "blue",
                                 daysToPlot = c(1,8,15,22), cex.axis = 0.8, ...) {
   if(is.null(start) & is.null(end)){
     months <- tolower(x$data$month)
@@ -133,7 +137,7 @@
     end<-max(dataDate)
   }
   datos <- .trimData.landings(x, start=start, end=end)
-  days <- paste0(as.character(datos$day),"-",capitalize(as.character(datos$month)))
+  days <- paste0(as.character(datos$day),"-", capitalize(engToSpa(as.character(datos$month))))
   daysToPlot <- which(as.numeric(datos$day) %in% daysToPlot)
   daysToPlot <- days[daysToPlot]
 

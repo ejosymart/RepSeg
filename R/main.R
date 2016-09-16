@@ -77,7 +77,7 @@ getData <-  function(file, type, toTons = TRUE, sp, tipoEsfuerzo, ...){
 #'            NombreFAO = "anchoveta", TallaMin = "12 cm", ArtePesca = "Red de cerco")
 makeReport <- function(desembarque, esfuerzo, cpue, filename = NULL, openAtEnd = TRUE,
                        paper = "a4r", width = 0, height = 0, sp = NULL, time = "month",
-                       cex.axis = 0.55, border = NA, ...){
+                       cex.axis = 0.55, border = NA, daysToPlot, ...){
 
   # Obtener tabla
   x <- getTable(desembarque)
