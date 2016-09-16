@@ -4,7 +4,7 @@
 \name{RepSeg-package}
 \alias{RepSeg}
 \alias{RepSeg-package}
-\title{Herramientas para la generación de reportes de captura, esfuerzo y CPUE}
+\title{Herramientas para la generación de reportes de captura, esfuerzo y CPUE.}
 \description{
 Herramientas para la generación de reportes de captura, esfuerzo y CPUE.
 }

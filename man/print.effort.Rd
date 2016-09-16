@@ -7,9 +7,9 @@
 \method{print}{effort}(x, ...)
 }
 \arguments{
-\item{...}{Argumentos extra.}
+\item{x}{Objeto de clase \code{effort}.}
 
-\item{object}{Objeto de clase \code{effort}.}
+\item{...}{Argumentos extra.}
 }
 \value{
 Información básica en la base de datos: Número de registros, meses, años, número de puertos.

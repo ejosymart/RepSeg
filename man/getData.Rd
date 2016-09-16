@@ -4,7 +4,7 @@
 \alias{getData}
 \title{getData}
 \usage{
-getData(file, type, toTons, sp, ...)
+getData(file, type, toTons = TRUE, sp, ...)
 }
 \arguments{
 \item{file}{Nombre del archivo con información de captura y cpue.}
@@ -14,6 +14,8 @@ Esfuerzo (\code{effort}) o CPUE (\code{cpue}).}
 
 \item{toTons}{Para convertir los valores a toneladas (\code{TRUE} or \code{FALSE}).
 Solo para desembarques (\code{landings}) y cpue (\code{cpue}).}
+
+\item{sp}{Especie de a la cual pertenece la información ingresada.}
 
 \item{...}{Argumentos extras.}
 }

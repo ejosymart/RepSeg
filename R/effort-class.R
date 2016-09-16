@@ -1,7 +1,8 @@
 #' @title Método \code{print} para objetos de clase \code{effort}.
 #'
-#' @param object Objeto de clase \code{effort}.
+#' @param x Objeto de clase \code{effort}.
 #' @param ... Argumentos extra.
+#'
 #' @return Información básica en la base de datos: Número de registros, meses, años, número de puertos.
 #' @export
 #'

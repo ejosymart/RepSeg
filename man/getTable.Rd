@@ -2,14 +2,15 @@
 % Please edit documentation in R/extras.R
 \name{getTable}
 \alias{getTable}
-\title{Title}
+\title{Función para obtener tablas resumen}
 \usage{
 getTable(data)
 }
 \arguments{
-\item{data}{}
+\item{data}{Objeto de clase \code{landings}, \code{effort} o \code{cpue} desde donde
+se desea obtener la tabla resumen.}
 }
 \description{
-Title
+Función para obtener tablas resumen
 }
 

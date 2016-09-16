@@ -1,12 +1,4 @@
-#' Title Calendario
-#'
-#' @param year
-#' @param ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
+
 .getCalendar <- function(year = NULL, ...){
   ndays   <- NULL
   nmonths <- NULL
@@ -28,18 +20,6 @@
 }
 
 
-#' Title Convertir base de datos
-#'
-#' @param file
-#' @param sp nombre de la especie
-#' @param tipo Tipo de flota o arte
-#' @param nameFileOut Nombre con el cual el archivo será guardado
-#' @param ... Argumentos extras
-#'
-#' @return Base de datos con el formato de captura y esfuerzo
-#' @export
-#'
-#' @examples
 convertBase <- function(file = file, sp, tipo, nameFileOut,...){
   base           <- read.csv(file = file, na.strings = "")
   colnames(base) <- tolower(colnames(base))
@@ -80,14 +60,12 @@ convertBase <- function(file = file, sp, tipo, nameFileOut,...){
 }
 
 
-#' Title
+#' Función para obtener tablas resumen
 #'
-#' @param data
+#' @param data Objeto de clase \code{landings}, \code{effort} o \code{cpue} desde donde
+#' se desea obtener la tabla resumen.
 #'
-#' @return
 #' @export
-#'
-#' @examples
 getTable <- function(data){
   data_summary <- summary(data)
   dataTable    <- data_summary[[3]]

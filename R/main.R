@@ -1,7 +1,8 @@
 #' @import R.utils
 #' @import graphics
+#' @import Hmisc
 #'
-#' @title Herramientas para la generación de reportes de captura, esfuerzo y CPUE
+#' @title Herramientas para la generación de reportes de captura, esfuerzo y CPUE.
 #'
 #' @author Josymar Torrejón-Magallanes, \email{jotorrejon@imarpe.gob.pe}
 #' @name RepSeg-package
@@ -22,6 +23,7 @@ NULL
 #' @param toTons Para convertir los valores a toneladas (\code{TRUE} or \code{FALSE}).
 #' Solo para desembarques (\code{landings}) y cpue (\code{cpue}).
 #' @param ... Argumentos extras.
+#' @param sp Especie de a la cual pertenece la información ingresada.
 #'
 #' @details Esta función retornará un objeto de clase \code{landings}, \code{effort} o
 #' \code{cpue}, dependiendo de lo seleccionado en el argumento \code{type}. La manera
@@ -33,7 +35,7 @@ NULL
 #' \dontrun{
 #' getData(file = "file.csv", type = "effort")
 #' }
-getData <-  function(file, type, toTons, sp, ...){
+getData <-  function(file, type, toTons = TRUE, sp, ...){
   output <-  switch(tolower(type),
                     landings = .getLandingsData(file = file, toTons = toTons, sp = sp, ...),
                     effort   = .getEffortData(file = file, sp = sp, ...),
@@ -74,19 +76,30 @@ getData <-  function(file, type, toTons, sp, ...){
 #' sp <- list(NombreCie = "Engraulis ringens", NombreCom = "anchoveta", NombreIng = "anchovy",
 #'            NombreFAO = "anchoveta", TallaMin = "12 cm", ArtePesca = "Red de cerco")
 makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
-                       paper = "USr", width = 10, height = 10, sp = NULL, ...){
+                       paper = "a4r", width = 10, height = 10, sp = NULL, ...){
+
+  # Obtener tabla
   x <- getTable(x)
 
+  # Rearmar tabla
   x <- data.frame(Mes = rownames(x), x, stringsAsFactors = FALSE, check.names = FALSE)
 
+  # Si no existe un valor en 'filename', generar un nombre de archivo temporal
   if(is.null(filename)){
     filename <- paste0(tempfile(), ".pdf")
   }
 
-  sp <- checkSP(desembarque$info$sp)
+  if(is.null(sp)){
+    sp <- desembarque$info$sp
+  }
 
+  # Revisar objeto 'sp'
+  sp <- checkSP(sp)
+
+  # Comando para guardar figura
   pdf(file = filename, paper = paper, width = width, height = height, ...)
 
+  # Armar matriz de plot
   layoutMatrix <- c(1, 2, 2, 2,
                     3, 3, 4, 4,
                     3, 3, 4, 4,
@@ -98,28 +111,28 @@ makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
   # IMARPE logo
   par(mar = c(3, 0, 0, 0))
   plot(1, 1, xlim = c(0, 1), ylim = c(0, 1), pch = NA, axes = FALSE, xlab = NA, ylab = NA)
-  rasterImage(imarpeLogo, 0.7, 0.1, 1, 0.9)
+  rasterImage(imarpeLogo, 0.6, 0.1, 1, 0.9)
 
   # Header
   delay <- 0.01
 
-  par(mar = c(5, 5, 3, 5), xaxs = "i", yaxs = "i")
+  par(mar = c(4, 5, 2, 5), xaxs = "i", yaxs = "i")
   plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = c(0, 1), ylim = c(4, 8))
 
-  text(x = 0.5 - delay, y = 7.5, labels = "Nombre científico:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 7.5, labels = sp$NombreCie, adj = 0, cex = 1.2, font = 3)
+  text(x = 0.3 - delay, y = 7.5, labels = "Nombre científico:", adj = 1, cex = 1.2, font = 2)
+  text(x = 0.3 + delay, y = 7.5, labels = sp$NombreCie, adj = 0, cex = 1.2, font = 3)
 
-  text(x = 0.5 - delay, y = 6.5, labels = "Nombre común:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 6.5, labels = sp$NombreCom, adj = 0, cex = 1.2, font = 1)
+  text(x = 0.3 - delay, y = 6.5, labels = "Nombre común:", adj = 1, cex = 1.2, font = 2)
+  text(x = 0.3 + delay, y = 6.5, labels = sp$NombreCom, adj = 0, cex = 1.2, font = 1)
 
-  text(x = 0.5 - delay, y = 5.5, labels = "Nombre en inglés:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 5.5, labels = sp$NombreIng, adj = 0, cex = 1.2, font = 1)
+  text(x = 0.3 - delay, y = 5.5, labels = "Nombre en inglés:", adj = 1, cex = 1.2, font = 2)
+  text(x = 0.3 + delay, y = 5.5, labels = sp$NombreIng, adj = 0, cex = 1.2, font = 1)
 
   # text(x = 0.5 - delay, y = 4.5, labels = "Nombre FAO:", adj = 1, cex = 1.2, font = 2)
   # text(x = 0.5 + delay, y = 4.5, labels = sp$NombreFAO, adj = 0, cex = 1.2, font = 1)
 
-  text(x = 0.5 - delay, y = 4.5, labels = "Talla mínima de captura:", adj = 1, cex = 1.2, font = 2)
-  text(x = 0.5 + delay, y = 4.5, labels = paste0(sp$TallaMin, " ", sp$Unidad, " (", sp$TipoMedicion, ")"),
+  text(x = 0.3 - delay, y = 4.5, labels = "Talla mínima de captura:", adj = 1, cex = 1.2, font = 2)
+  text(x = 0.3 + delay, y = 4.5, labels = paste0(sp$TallaMin, " ", sp$Unidad, " (", sp$TipoMedicion, ")"),
        adj = 0, cex = 1.2, font = 1)
 
   # text(x = 0.5 - delay, y = 2.0, labels = "Arte de pesca:", adj = 1, cex = 1.2, font = 2)
@@ -159,6 +172,7 @@ makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
 
   dev.off()
 
+  # Guardar archivo
   if(is.null(filename) | isTRUE(openAtEnd)){
     file.show(filename)
   }

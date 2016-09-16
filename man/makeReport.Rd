@@ -4,7 +4,7 @@
 \alias{makeReport}
 \title{Función que construye el reporte de seguimiento y lo exporta en formato pdf.}
 \usage{
-makeReport(x, filename = NULL, openAtEnd = TRUE, paper = "USr",
+makeReport(x, filename = NULL, openAtEnd = TRUE, paper = "a4r",
   width = 10, height = 10, sp = NULL, ...)
 }
 \arguments{
