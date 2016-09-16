@@ -34,9 +34,9 @@ readSegFile <- function(file, ...){
 
   output$month <- paste0(toupper(substr(output$month, 1, 1)), tolower(substr(output$month, 2, 99)))
 
-  dateVector <- with(output, as.Date(paste(year, word2month(month), 15, sep = "-")))
+  dateVector <- with(output, as.Date(paste(year, word2month(month), day, sep = "-")))
 
-  dateRange <- seq.Date(range(dateVector)[1], range(dateVector)[2], by = "month")
+  dateRange <- seq.Date(range(dateVector)[1], range(dateVector)[2], by = "day")
   dateRange <- dateRange[!is.element(dateRange, unique(dateVector))]
 
   newData <- as.data.frame(mat.or.vec(nr = length(dateRange), nc = ncol(output)))
@@ -44,7 +44,7 @@ readSegFile <- function(file, ...){
 
   newData$year <- as.numeric(substr(dateRange, 1, 4))
   newData$month <- month2word(substr(dateRange, 6, 7))
-  newData$day <- rep(15, length(dateRange))
+  newData$day <- as.numeric(substr(dateRange, 9, 10))
 
   output <- rbind.data.frame(output, newData, stringsAsFactors = FALSE)
   output <- output[order(output$year, word2month(output$month), output$day),]
