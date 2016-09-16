@@ -47,7 +47,7 @@ readSegFile <- function(file, ...){
   newData$day <- rep(15, length(dateRange))
 
   output <- rbind.data.frame(output, newData, stringsAsFactors = FALSE)
-  output <- output[order(output$day, word2month(output$month), output$year),]
+  output <- output[order(output$year, word2month(output$month), output$day),]
 
   return(output)
 }

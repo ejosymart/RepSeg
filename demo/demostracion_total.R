@@ -2,7 +2,7 @@
 # Definición de parámetros ------------------------------------------------
 
 # Dirección de archivo de entrada
-file <- "data_ejemplo.csv"
+file <- "data/data_ejemplo.csv"
 
 # Indicar la especie de la que proviene la información
 sp <- "jurel"
@@ -27,11 +27,11 @@ tablaEsfuerzo <- getTable(esfuerzo)
 tablaCPUE <- getTable(cpue)
 
 # Generación de gráficos
-plot(desembarque, time = "month")
+plot(desembarque, time = "day")
 
-plot(esfuerzo, time = "month")
+plot(esfuerzo, time = "day")
 
-plot(cpue, time = "month")
+plot(cpue, time = "day")
 
 # Obtención de información importante
 summary(desembarque)

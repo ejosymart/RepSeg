@@ -85,7 +85,7 @@
 
 .trimData.cpue <- function(x, start, end) {
   datos  <- x$data
-  months <- datos$month
+  months <- tolower(datos$month)
   monthsPosition <- unique(months)
   dataDate <- paste(datos$year,"-",match(months, tolower(month.abb)), "-",datos$day,sep="")
 
@@ -107,7 +107,7 @@
 
 .plotDays.cpue <- function (x, start=NULL, end=NULL, main=NULL, xlab=NULL, ylab=NULL, col = "blue", ...) {
   if(is.null(start) & is.null(end)){
-    months <- x$data$month
+    months <- tolower(x$data$month)
     monthsPosition <- unique(months)
     dataDate <- as.Date(as.character(paste(x$data$year,"-",match(months,tolower(month.abb)), "-",x$data$day,sep="")),format="%Y-%m-%d")
     start <- min(dataDate)
@@ -215,7 +215,7 @@
 
 .plotPort.cpue <- function (x, start=NULL, end=NULL, main=NULL, xlab=NULL, ylab=NULL, puerto=NULL, col = "blue", ...) {
   if(is.null(start) & is.null(end)){
-    months <- x$dataPortDay$month
+    months <- tolower(x$dataPortDay$month)
     monthsPosition <- unique(months)
     dataDate <- as.Date(as.character(paste(x$dataPortDay$year,"-",match(months,tolower(month.abb)), "-",x$dataPortDay$day,sep="")),format="%Y-%m-%d")
     start <- min(dataDate)
