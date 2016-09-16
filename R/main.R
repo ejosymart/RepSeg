@@ -35,12 +35,12 @@ NULL
 #' \dontrun{
 #' getData(file = "file.csv", type = "effort")
 #' }
-getData <-  function(file, type, toTons = TRUE, sp, ...){
+getData <-  function(file, type, toTons = TRUE, sp, tipoEsfuerzo, ...){
   output <-  switch(tolower(type),
                     landings = .getLandingsData(file = file, toTons = toTons, sp = sp, ...),
-                    effort   = .getEffortData(file = file, sp = sp, ...),
-                    cpue     = .getCPUEData(file = file, toTons = toTons, sp = sp, ...),
-                    read.csv(file = file, ...))
+                    effort   = .getEffortData(file = file, sp = sp, tipoEsfuerzo = tipoEsfuerzo, ...),
+                    cpue     = .getCPUEData(file = file, toTons = toTons, sp = sp, tipoEsfuerzo = tipoEsfuerzo, ...),
+                    read.csv(file = file, stringsAsFactors = FALSE, ...))
   return(output)
 }
 
@@ -75,11 +75,12 @@ getData <-  function(file, type, toTons = TRUE, sp, ...){
 #'
 #' sp <- list(NombreCie = "Engraulis ringens", NombreCom = "anchoveta", NombreIng = "anchovy",
 #'            NombreFAO = "anchoveta", TallaMin = "12 cm", ArtePesca = "Red de cerco")
-makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
-                       paper = "a4r", width = 10, height = 10, sp = NULL, ...){
+makeReport <- function(desembarque, esfuerzo, cpue, filename = NULL, openAtEnd = TRUE,
+                       paper = "a4r", width = 0, height = 0, sp = NULL, time = "month",
+                       cex.axis = 0.55, border = NA, ...){
 
   # Obtener tabla
-  x <- getTable(x)
+  x <- getTable(desembarque)
 
   # Rearmar tabla
   x <- data.frame(Mes = rownames(x), x, stringsAsFactors = FALSE, check.names = FALSE)
@@ -97,26 +98,26 @@ makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
   sp <- checkSP(sp)
 
   # Comando para guardar figura
-  pdf(file = filename, paper = paper, width = width, height = height, ...)
+  pdf(file = filename, paper = paper, width = width, height = height)
 
   # Armar matriz de plot
   layoutMatrix <- c(1, 2, 2, 2,
                     3, 3, 4, 4,
-                    3, 3, 4, 4,
-                    5, 5, 6, 6,
-                    5, 5, 6, 6)
+                    3, 3, 5, 5,
+                    6, 6, 7, 7,
+                    6, 6, 7, 7)
   layoutMatrix <- matrix(layoutMatrix, ncol = 4, byrow = TRUE)
   layout(mat = layoutMatrix)
 
   # IMARPE logo
   par(mar = c(3, 0, 0, 0))
   plot(1, 1, xlim = c(0, 1), ylim = c(0, 1), pch = NA, axes = FALSE, xlab = NA, ylab = NA)
-  rasterImage(imarpeLogo, 0.6, 0.1, 1, 0.9)
+  rasterImage(imarpeLogo, 0.7, 0.1, 1, 0.9)
 
   # Header
   delay <- 0.01
 
-  par(mar = c(4, 5, 2, 5), xaxs = "i", yaxs = "i")
+  par(mar = c(3, 5, 1, 5), xaxs = "i", yaxs = "i")
   plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = c(0, 1), ylim = c(4, 8))
 
   text(x = 0.3 - delay, y = 7.5, labels = "Nombre científico:", adj = 1, cex = 1.2, font = 2)
@@ -149,7 +150,7 @@ makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
   tableSep <- seq(from = 0, by = tableSep, length.out = ncol(x)) + tableSep/2
 
   text(x = tableSep, y = c(13.5, 13.5), labels = colnames(x), font = 2)
-  mtext(text = "Desembarques", side = 3, line = 2)
+  mtext(text = "Desembarques (t)", side = 3, line = 2)
 
   for(i in seq(nrow(x), 1)){
     text(x = tableSep, y = c(13.5, 13.5) - i, labels = x[i,])
@@ -158,17 +159,25 @@ makeReport <- function(x, filename = NULL, openAtEnd = TRUE,
   abline(h = c(13, 1), lwd = 2)
   box(lwd = 2)
 
-  # Plot 2: Landin
-  par(mar = c(4, 4, 3, 1), xaxs = "r")
-  plot(desembarque, time = "month", main = "Desembarques")
+  # Plot 2: Landings
+  par(mar = c(3, 4, 3, 2), xaxs = "r")
+  plot(desembarque, main = "Desembarques", time = "day", daysToPlot = 1, cex.axis = cex.axis,
+       border = border, ...)
+  mtext(text = "Diario", side = 4, line = 1, cex = cex.axis, font = 2)
 
-  # Plot 3
-  par(mar = c(4, 4, 4, 1), xaxs = "r")
-  plot(esfuerzo, time = "month", main = "Esfuerzo pesquero")
+  # Plot 3: Landings
+  par(mar = c(3, 4, 1, 2), xaxs = "r")
+  plot(desembarque, time = "month", main = NA, cex.axis = cex.axis, border = border, ...)
+  mtext(text = "Mensual", side = 4, line = 1, cex = cex.axis, font = 2)
 
   # Plot 4
-  par(mar = c(4, 4, 4, 1), xaxs = "r")
-  plot(cpue, time = "month", main = "CPUE (t/viaje)")
+  par(mar = c(3, 4, 4, 0), xaxs = "r")
+  plot(esfuerzo, main = "Esfuerzo pesquero", time = time, cex.axis = cex.axis, border = border, ...)
+
+  # Plot 5
+  par(mar = c(3, 4, 4, 0), xaxs = "r")
+  plot(cpue, main = paste0("CPUE (t/", cpue$info$effort_type, ")"), time = time, cex.axis = cex.axis,
+       border = border, ...)
 
   dev.off()
 

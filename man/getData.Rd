@@ -4,7 +4,7 @@
 \alias{getData}
 \title{getData}
 \usage{
-getData(file, type, toTons = TRUE, sp, ...)
+getData(file, type, toTons = TRUE, sp, tipoEsfuerzo, ...)
 }
 \arguments{
 \item{file}{Nombre del archivo con información de captura y cpue.}

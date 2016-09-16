@@ -2,10 +2,13 @@
 # Definición de parámetros ------------------------------------------------
 
 # Dirección de archivo de entrada
-file <- "data/data_ejemplo.csv"
+file <- "data/data_ejemplo2.csv"
 
 # Indicar la especie de la que proviene la información
 sp <- "jurel"
+
+# Indicar el tipo de esfuerzo usado
+tipoEsfuerzo <- "viaje"
 
 
 # Análisis ----------------------------------------------------------------
@@ -13,11 +16,11 @@ sp <- "jurel"
 require(RepSeg)
 
 #Lectura de datos
-desembarque <- getData(file = file, sp = sp, type = "landings")
+desembarque <- getData(file = file, sp = sp, type = "landings", tipoEsfuerzo = tipoEsfuerzo)
 
-esfuerzo    <- getData(file = file, sp = sp, type = "effort")
+esfuerzo    <- getData(file = file, sp = sp, type = "effort", tipoEsfuerzo = tipoEsfuerzo)
 
-cpue        <- getData(file = file, sp = sp, type = "cpue")
+cpue        <- getData(file = file, sp = sp, type = "cpue", tipoEsfuerzo = tipoEsfuerzo)
 
 # Generación de tablas
 tablaDesembarque <- getTable(desembarque)
@@ -41,10 +44,4 @@ summary(esfuerzo)
 summary(cpue)
 
 # Generación del reporte
-makeReport(x = desembarque)
-
-# Generación del reporte para una especie no incluída en la base predeterminada
-sp <- list(NombreCie = "Engraulis ringens", NombreCom = "anchoveta", NombreIng = "anchovy",
-           TallaMin = "12", Unidad = "cm", TipoMedicion = "LT")
-
-makeReport(x = desembarque, sp = sp)
+makeReport(desembarque, esfuerzo, cpue, time = "month", cex.axis = 0.8)

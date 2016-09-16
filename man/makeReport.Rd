@@ -4,13 +4,11 @@
 \alias{makeReport}
 \title{Función que construye el reporte de seguimiento y lo exporta en formato pdf.}
 \usage{
-makeReport(x, filename = NULL, openAtEnd = TRUE, paper = "a4r",
-  width = 10, height = 10, sp = NULL, ...)
+makeReport(desembarque, esfuerzo, cpue, filename = NULL, openAtEnd = TRUE,
+  paper = "a4r", width = 0, height = 0, sp = NULL, time = "month",
+  cex.axis = 0.55, border = NA, ...)
 }
 \arguments{
-\item{x}{Objeto de clase \code{landings} de donde se obtendrán los datos de
-desembarque.}
-
 \item{filename}{Archivo en donde se guardará el pdf. Si es \code{NULL}, se creará un archivo temporal
 que se mostrará al final.}
 
@@ -27,6 +25,9 @@ no se tomará en cuenta.}
 en el argumento \code{x}. Ver detalles abajo.}
 
 \item{...}{Argumentos extra pasados a la función \code{pdf}.}
+
+\item{x}{Objeto de clase \code{landings} de donde se obtendrán los datos de
+desembarque.}
 }
 \description{
 Función que construye el reporte de seguimiento y lo exporta en formato pdf.

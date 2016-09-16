@@ -1,4 +1,4 @@
-.getEffortData <- function(file=file, toTons = TRUE, sp, ...) {
+.getEffortData <- function(file, toTons, sp, tipoEsfuerzo, ...) {
 
   out <- readSegFile(file = file, na.strings = "", stringsAsFactors = FALSE)
   outEffort <- out[seq(5, length(colnames(out)), by = 2)]
@@ -11,11 +11,13 @@
     namesPorts <- c(namesPorts, namesP)
   }
 
-  info <- list(file  = file, records=nrow(out),
-              months = length(rle(out$month)$values),
-              years  = length(unique(out$year)),
-              ports  = length(namesPorts),
-              sp     = sp)
+  info <- list(file        = file,
+               records     = nrow(out),
+               months      = length(rle(out$month)$values),
+               years       = length(unique(out$year)),
+               ports       = length(namesPorts),
+               sp          = sp,
+               effort_type = tipoEsfuerzo)
 
   output <- list(data=out, info=info)
   class(output) <- c("effort")
@@ -63,7 +65,7 @@
   colnames(datos) <- c("year", "month", "day", "Ports")
 
   tabla <- tapply(datos$Ports, list(datos$month, datos$year),
-                 sum, na.remove=FALSE)
+                  sum, na.remove=FALSE)
 
   monthsTable <- row.names(tabla)
   sortMonth <- sort(match(monthsTable, months), decreasing=FALSE)
@@ -118,7 +120,8 @@
   return(tabla)
 }
 
-.plotDays.effort <- function (x, start=NULL, end=NULL, main=NULL, xlab=NULL, ylab=NULL, col = "blue", ...) {
+.plotDays.effort <- function (x, start=NULL, end=NULL, main=NULL, xlab=NULL, ylab=NULL, col = "blue",
+                              daysToPlot = c(1,8,15,22), cex.axis = 0.8, ...) {
   if(is.null(start) & is.null(end)){
     months   <- tolower(x$data$month)
     monthsPosition <- unique(months)
@@ -128,21 +131,19 @@
   }
   datos <- .trimData.effort(x, start=start, end=end)
   days  <- paste0(as.character(datos$day),"-",capitalize(as.character(datos$month)))
-  daysToPlot <- c(1,8,15,22)
   daysToPlot <- which(as.numeric(datos$day) %in% daysToPlot)
   daysToPlot <- days[daysToPlot]
 
   days[! days %in% daysToPlot] <- NA
 
   if(is.null(main)) main = "Esfuerzo Diario"
-  if(is.null(xlab)) xlab = "D\u{ED}a"
   if(is.null(ylab)) ylab = "Numero de viajes"
-  barplot(datos$Ports, main = main, xlab = xlab,
+  barplot(datos$Ports, main = main, xlab = NA,
           ylab = ylab, col = col, names.arg = FALSE,
-          ylim = c(0,max(datos$Ports)*1.2), cex.names = 0.7, axes = FALSE)
+          ylim = c(0,max(datos$Ports)*1.2), cex.names = 0.7, axes = FALSE, ...)
   AxisDate <- seq(0.7, by = 1.2, length.out = length(days))
   NonNa =! is.na(days)
-  axis(1, at = AxisDate[NonNa], labels = days[NonNa], las = 2, cex.axis = 0.7)
+  axis(1, at = AxisDate[NonNa], labels = days[NonNa], las = 2, cex.axis = cex.axis)
   axis(2, las = 2, cex.axis = 0.7)
   box()
 
@@ -150,7 +151,7 @@
 
 }
 
-.plotMonths.effort <- function (x, main=NULL, xlab=NULL, ylab=NULL, col = "blue", ...) {
+.plotMonths.effort <- function (x, main=NULL, xlab=NULL, ylab=NULL, col = "blue", cex.axis = 0.8, ...) {
 
   datos <- .getMonth.effort(x)
   years <- as.numeric(colnames(datos))
@@ -164,15 +165,14 @@
   namesMonthPlot  <- capitalize(rep(namesMonth, length.out = length(monthPlot)))
 
   if(is.null(main)) main="Esfuerzo Mensual"
-  if(is.null(xlab)) xlab="Mes"
   if(is.null(ylab)) ylab="Numero de viajes"
   barplot(monthPlot, main=main,
-          xlab=xlab, ylab=ylab, col=col, names.arg=FALSE,
-          ylim=c(0, max(monthPlot)*1.2), cex.names=0.7, axes=FALSE)
+          xlab=NA, ylab=ylab, col=col, names.arg=FALSE,
+          ylim=c(0, max(monthPlot)*1.2), cex.names=0.7, axes=FALSE, ...)
   axis(1, at=seq(0.7, by=1.2, length.out=length(monthPlot)), labels=namesMonthPlot,
-       las=1, cex.axis=0.8, line=0)
+       las=1, cex.axis=cex.axis, line=0)
   axis(1, at=seq(0.7,by=1.2, length.out=length(monthPlot)),
-       labels=rep(years,each=12)[1:length(monthPlot)], las=1, cex.axis=0.8, line=1, tick=FALSE)
+       labels=rep(years,each=12)[1:length(monthPlot)], las=1, cex.axis=cex.axis, line=1, tick=FALSE)
   axis(2, las=2, cex.axis=0.8)
   box()
 
@@ -180,19 +180,18 @@
 
 }
 
-.plotYears.effort <- function (x, main=NULL, xlab=NULL, ylab=NULL, col = "blue", ...) {
+.plotYears.effort <- function (x, main=NULL, xlab=NULL, ylab=NULL, col = "blue", cex.axis = 0.8, ...) {
 
   datos <- .getYear.effort(x)
   years <- as.numeric(rownames(datos))
 
   if(is.null(main)) main="Esfuerzo Anuales"
-  if(is.null(xlab)) xlab="A\u{F1}o"
   if(is.null(ylab)) ylab="Numero de viajes"
-  barplot(datos$Effort, main=main, xlab=xlab,
+  barplot(datos$Effort, main=main, xlab=NA,
           ylab=ylab, col=col, names.arg=FALSE,
-          ylim=c(0,max(datos)*1.2), cex.names=0.7, axes=FALSE)
+          ylim=c(0,max(datos)*1.2), cex.names=0.7, axes=FALSE, ...)
   axis(1, at=seq(0.7, by=1.2, length.out=length(years)), labels=years, las=1,
-       cex.axis=0.8)
+       cex.axis=cex.axis)
   axis(2, las=2, cex.axis=0.8)
   box()
 

@@ -36,7 +36,9 @@ readSegFile <- function(file, ...){
 
   dateVector <- with(output, as.Date(paste(year, word2month(month), day, sep = "-")))
 
-  dateRange <- seq.Date(range(dateVector)[1], range(dateVector)[2], by = "day")
+  actualYear <- sort(unique(as.numeric(substr(as.character(dateVector), 1, 4))))
+
+  dateRange <- as.Date(apply(.getCalendar(actualYear), 1, function(x) paste(x, collapse = "-")))
   dateRange <- dateRange[!is.element(dateRange, unique(dateVector))]
 
   newData <- as.data.frame(mat.or.vec(nr = length(dateRange), nc = ncol(output)))
