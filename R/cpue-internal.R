@@ -124,7 +124,7 @@
   days[! days %in% daysToPlot] <- NA
 
   if(is.null(main)) main="CPUE Diario"
-  if(is.null(ylab)) ylab="Toneladas por viaje"
+  if(is.null(ylab)) ylab=""
   barplot(datos$cpue, main=main, xlab=NA,
           ylab=ylab, col=col, names.arg = FALSE,
           ylim=c(0,max(datos$cpue)*1.2), cex.names=0.7, axes=FALSE, ...)
@@ -152,7 +152,7 @@
   namesMonthPlot  <- capitalize(rep(namesMonth, length.out = length(monthPlot)))
 
   if(is.null(main)) main="CPUE Mensual"
-  if(is.null(ylab)) ylab="Toneladas por viaje"
+  if(is.null(ylab)) ylab=""
   barplot(monthPlot, main=main,
           xlab=NA, ylab=ylab, col=col, names.arg=FALSE,
           ylim=c(0, max(monthPlot)*1.2), cex.names=0.7, axes=FALSE, ...)
@@ -173,7 +173,7 @@
   years <- as.numeric(rownames(datos))
 
   if(is.null(main)) main="CPUE Anual"
-  if(is.null(ylab)) ylab="Toneladas por viaje"
+  if(is.null(ylab)) ylab=""
   barplot(datos$CPUE, main=main, xlab=NA,
           ylab=ylab, col=col, names.arg=FALSE,
           ylim=c(0,max(datos)*1.2), cex.names=0.7, axes=FALSE, ...)
@@ -230,7 +230,8 @@
 
   if(is.null(main)) main="CPUE Diario"
   if(is.null(xlab)) xlab="D\u{ED}a"
-  if(is.null(ylab)) ylab="Toneladas por viaje"
+  if(is.null(ylab)) ylab="
+  "
   barplot(datos[, 4], main=main, xlab=xlab,
           ylab=ylab, col=col, names.arg = FALSE,
           ylim=c(0,max(datos[, 4])*1.2), cex.names=0.7, axes=FALSE, sub = toupper(puerto))

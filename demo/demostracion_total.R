@@ -5,10 +5,10 @@
 file <- "../data_ejemplo.csv"
 
 # Indicar la especie de la que proviene la información
-sp <- "jurel"
+sp   <- "caballa"
 
 # Indicar el tipo de esfuerzo usado
-tipoEsfuerzo <- "viaje"
+tipoEsfuerzo <- "Capacidad de bodega"
 
 
 # Análisis ----------------------------------------------------------------
@@ -25,9 +25,9 @@ cpue        <- getData(file = file, sp = sp, type = "cpue", tipoEsfuerzo = tipoE
 # Generación de tablas
 tablaDesembarque <- getTable(desembarque)
 
-tablaEsfuerzo <- getTable(esfuerzo)
+tablaEsfuerzo    <- getTable(esfuerzo)
 
-tablaCPUE <- getTable(cpue)
+tablaCPUE        <- getTable(cpue)
 
 # Generación de gráficos
 plot(desembarque, time = "month")
@@ -44,4 +44,4 @@ summary(esfuerzo)
 summary(cpue)
 
 # Generación del reporte
-makeReport(desembarque, esfuerzo, cpue, time = "month", cex.axis = 0.8)
+makeReport(desembarque, esfuerzo, cpue, time = "month", cex.axis = 0.5)

@@ -137,7 +137,7 @@
   days[! days %in% daysToPlot] <- NA
 
   if(is.null(main)) main = "Esfuerzo Diario"
-  if(is.null(ylab)) ylab = "Numero de viajes"
+  if(is.null(ylab)) ylab = ""
   barplot(datos$Ports, main = main, xlab = NA,
           ylab = ylab, col = col, names.arg = FALSE,
           ylim = c(0,max(datos$Ports)*1.2), cex.names = 0.7, axes = FALSE, ...)
@@ -164,8 +164,8 @@
   namesMonth <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
   namesMonthPlot  <- capitalize(rep(namesMonth, length.out = length(monthPlot)))
 
-  if(is.null(main)) main="Esfuerzo Mensual"
-  if(is.null(ylab)) ylab="Numero de viajes"
+  if(is.null(main)) main = "Esfuerzo Mensual"
+  if(is.null(ylab)) ylab = ""
   barplot(monthPlot, main=main,
           xlab=NA, ylab=ylab, col=col, names.arg=FALSE,
           ylim=c(0, max(monthPlot)*1.2), cex.names=0.7, axes=FALSE, ...)
@@ -185,8 +185,8 @@
   datos <- .getYear.effort(x)
   years <- as.numeric(rownames(datos))
 
-  if(is.null(main)) main="Esfuerzo Anuales"
-  if(is.null(ylab)) ylab="Numero de viajes"
+  if(is.null(main)) main = "Esfuerzo Anuales"
+  if(is.null(ylab)) ylab = ""
   barplot(datos$Effort, main=main, xlab=NA,
           ylab=ylab, col=col, names.arg=FALSE,
           ylim=c(0,max(datos)*1.2), cex.names=0.7, axes=FALSE, ...)

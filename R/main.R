@@ -173,12 +173,13 @@ makeReport <- function(desembarque, esfuerzo, cpue, filename = NULL, openAtEnd =
   # Plot 4
   par(mar = c(3, 4, 4, 0), xaxs = "r")
   plot(esfuerzo, main = "Esfuerzo pesquero", time = time, cex.axis = cex.axis, border = border, ...)
+  mtext(text = esfuerzo$info$effort_type, side = 2, line = 2.75, cex = 0.75, font = 2)
 
   # Plot 5
   par(mar = c(3, 4, 4, 0), xaxs = "r")
   plot(cpue, main = paste0("CPUE (t/", cpue$info$effort_type, ")"), time = time, cex.axis = cex.axis,
        border = border, ...)
-
+  mtext(text = paste0("t/", cpue$info$effort_type), side = 2.75, line = 2, cex = 0.75, font = 2)
   dev.off()
 
   # Guardar archivo
