@@ -6,7 +6,7 @@
 \usage{
 makeReport(desembarque, esfuerzo, cpue, filename = NULL, openAtEnd = TRUE,
   paper = "a4r", width = 0, height = 0, sp = NULL, time = "month",
-  cex.axis = 0.55, border = NA, ...)
+  cex.axis = 0.55, border = NA, daysToPlot, ...)
 }
 \arguments{
 \item{filename}{Archivo en donde se guardará el pdf. Si es \code{NULL}, se creará un archivo temporal

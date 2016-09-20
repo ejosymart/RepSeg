@@ -5,10 +5,9 @@ Version: 0.1.0
 Authors@R: c(person("Josymar", "Torrejon-Magallanes", role = c("aut", "cre"), email = "jotorrejon@imarpe.gob.pe"),
               person("Criscely", "Lujan-Paredes", role = c("ctb"), email = "criscelylujan@gmail.com"),
               person("Wencheng", "Lau-Medrano", role = c("aut"), email = "llau@imarpe.gob.pe"))
-Depends: R.utils, Hmisc, graphics
+Depends: R.utils, Hmisc, graphics, survival
 Maintainer: Josymar Torrejon-Magallanes <jotorrejon@imarpe.gob.pe>
-Description: Herramientas para la generacion de reportes de captura, esfuerzo y
-    CPUE.
+Description: Herramientas para la generacion de reportes de captura, esfuerzo y CPUE.
 License: GPL (>= 2)
 LazyData: TRUE
 RoxygenNote: 5.0.1

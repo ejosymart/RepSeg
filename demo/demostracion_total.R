@@ -25,6 +25,8 @@ cpue        <- getData(file = file, sp = sp, type = "cpue", tipoEsfuerzo = tipoE
 # Generación de tablas
 tablaDesembarque <- getTable(desembarque)
 
+tablaDesembarque2 <- getTable2(desembarque)
+
 tablaEsfuerzo    <- getTable(esfuerzo)
 
 tablaCPUE        <- getTable(cpue)

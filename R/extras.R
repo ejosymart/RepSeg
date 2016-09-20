@@ -1,3 +1,13 @@
+.monthToNumber <- function(x){
+  index <- match(x, month.abb)
+  return(index)
+}
+
+.numberToMonth <- function(x){
+  index <- match(x, 1:12)
+  return(month.name_spanish[index])
+}
+
 
 .getCalendar <- function(year = NULL, ...){
   ndays   <- NULL
@@ -71,8 +81,7 @@ getTable <- function(data){
   dataTable    <- data_summary[[3]]
 
   outTable     <- rbind(round(dataTable, 0), total = round(colSums(dataTable), 0))
-  row.names(outTable) <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
-                           "Septiembre", "Octubre", "Noviembre", "Diciembre", "Total (t)")
+  row.names(outTable) <- c(month.name_spanish, "Total (t)")
 
   if(class(data) == "effort"){
     row.names(outTable)[13] = "Total"
@@ -83,3 +92,42 @@ getTable <- function(data){
   return(outTable)
 }
 
+
+#' Función para obtener tablas resumen mostrando las estadisticas quincenales dle último mes
+#'
+#' @param Objeto de clase \code{landings} o \code{effort} desde donde
+#' se desea obtener la tabla resumen.
+#' @export
+getTable2 <- function(data){
+  if (!inherits(data, c("landings", "effort")))
+    stop("Usar solo con objetos de clase 'landings' o 'effort'")
+  data_summary  <- summary(data)
+  sumdays       <- data_summary[[1]]
+  sumdays$month <- .monthToNumber(sumdays$month)
+  today         <- strsplit(date(), " ")
+  actualYear    <- as.numeric(today[[1]][5])
+  actualMonth   <- .monthToNumber(today[[1]][2])
+  actualDay     <- as.numeric(today[[1]][3])
+  byMonth       <- sumdays[which(sumdays$year == actualYear & sumdays$month == actualMonth & sumdays$day <= actualDay), ]
+
+  if(nrow(byMonth) > 15){
+    byMonthfirst   <- head(byMonth, 15)
+    byMonthlast    <- tail(byMonth, nrow(byMonth) - 15)
+    tab1           <- data.frame(month = c(paste(byMonthfirst$day[1], "-", rev(byMonthfirst$day)[1], .numberToMonth(byMonthfirst$month[1]), sep = " "),
+                                           paste(byMonthlast$day[1], "-", rev(byMonthlast$day)[1], .numberToMonth(byMonthfirst$month[1]), sep = " ")),
+                                 Ports = c(sum(byMonthfirst$Ports), sum(byMonthlast$Ports)))
+  }else{
+    byMonthfirst  <- head(byMonth, 15)
+    tab1          <- data.frame(month = paste(byMonthfirst$day[1], "-", rev(byMonthfirst$day)[1], .numberToMonth(byMonthfirst$month[1]), sep = " "),
+                                Ports = c(sum(byMonthfirst$Ports)))
+  }
+
+  byMonth2       <- sumdays[which(sumdays$year == actualYear & sumdays$month < actualMonth), ]
+  tab2           <- aggregate(Ports ~ month + year, byMonth2, sum)
+  tab2$month     <- .numberToMonth(tab2$month)
+  tab2           <- tab2[, c(1,3)]
+
+  outTable <- rbind(tab2, tab1)
+  colnames(outTable) <- c("Mes", actualYear)
+  return(outTable)
+}
