@@ -15,20 +15,21 @@ Este manual muestra los pasos para la instalación y aplicación del paquete ***Re
 
 1) Escribir las siguientes líneas para instalar los paquetes **devtools**, **Hmisc** y **R.utils**:
 
-```{r, echo = T}
-# install.packages(devtools)
-# install.packages(Hmisc)
-# install.packages(R.utils)
+```{r, eval = F}
+install.packages(devtools)
+install.packages(Hmisc)
+install.packages(R.utils)
 ```
-Estos paquetes se instalan solo una vez (quitar el símbolo # para poder instalar los paquetes).
+Estos paquetes se instalan solo una vez.
 
 2) Para instalar el paquete ***RepSeg*** copiar las siguientes líneas:
 
-```{r, warning=FALSE, message=FALSE}
+```{r, eval = FALSE}
 library(devtools)
 library(Hmisc)
 library(R.utils)
 install_github("ejosymart/RepSeg")
+library(RepSeg)
 ```
 Cargar los paquetes usando el comando **library**. La última línea de código se debe correr solo una vez. Sin embargo, cada vez que se haga una mejora o actualización al paquete ***RepSeg***, se deberá correr esta línea nuevamente. Para correr cualquier línea de código, se deberán ubicar en la línea y ejecutarla usando las teclas "Ctrl" y "R" al mismo tiempo. 
 \vspace*{-10mm}
