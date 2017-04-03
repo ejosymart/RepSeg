@@ -44,47 +44,59 @@ grid.raster(img)
 \newpage
 #Aplicación del paquete ***RepSeg***
 
-Una vez instalado el paquete ***RepSeg***, para poder obtener el reporte se necesita tener una base de datos en extensión ***.csv***. Esta base de datos debe tener el siguiente formato:
+Una vez instalado el paquete ***RepSeg***, para poder obtener el reporte se necesita tener dos base de datos en extensión ***.csv***. Esta base de datos debe tener el siguiente formato:
 
 \vspace*{-10mm}
-```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center', fig.show='asis'}
+```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center'}
 library(png)
 library(grid)
-img <- readPNG("data/base.png")
+img <- readPNG("data/base1.png")
+grid.raster(img)
+``` 
+\vspace*{-10mm}
+
+
+\vspace*{-10mm}
+```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("data/base2.png")
 grid.raster(img)
 ``` 
 \vspace*{-10mm}
 
 Las primeras tres columnas indican, el año, mes y día respectivamente. Las siguientes columnas corresponden a los datos de captura y esfuerzo por puerto. Nótese que los nombres de los puertos vienen acompañados de un _c para datos de captura y de _e para datos de esfuerzo. Este estilo de nombre se debe mantener.
 
-Así mismo, esta base de datos (p.e: ***data_ejemplo.csv***) junto con el script para generar los reportes (p.e: ***reporte.R***), deben estar guardados en una carpeta. Luego abrimos el archivo ***reporte.R*** (abrir con RStudio)
-\vspace*{-20mm}
+**Información importante**: Un de las bases de datos contiene la captura y el esfuerzo correspondiente a dicha captura, mientras que la otra contiene solamente las capturas.
 
+\newpage
+Así mismo, estas bases de datos (p.e: *desembarque_esfuerzo.csv*, *desembarque.csv*) junto con el script para generar los reportes (p.e: ***reporte.R***), deben estar guardados en una carpeta. Luego abrimos el archivo ***reporte.R*** (abrir con RStudio)
+\vspace*{-10mm}
 ```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center', fig.show='asis'}
 library(png)
 library(grid)
 img <- readPNG("data/abrircon.png")
 grid.raster(img)
 ``` 
-\vspace*{-20mm}
+\vspace*{-10mm}
 
-\newpage
 Una vez abierto el script, direccionar de la siguiente manera, haciendo click en **To Source File Location**:
 \vspace*{-10mm}
 ```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center', fig.show='asis'}
 library(png)
 library(grid)
-img <- readPNG("data/directorio.png")
+img <- readPNG("data/directorio2.png")
 grid.raster(img)
 ``` 
 \vspace*{-10mm}
 
-Una vez realizados estos pasos, ya podemos obtener el reporte simplemente corriendo el script ***reporte.R***. Para ello hacer check en ***Source on Save*** y darle click a la imagen del disquette como se muestra en la siguiente figura (círculo en rojo). Con estos pasos el script correrá y se visualizará el reporte.
+\newpage
+Realizados estos pasos, ya podemos obtener el reporte simplemente corriendo el script ***reporte.R***. Para ello hacer check en ***Source on Save*** y darle click a la imagen del disquette como se muestra en la siguiente figura (círculo en rojo). Con estos pasos el script correrá y se visualizará el reporte.
 \vspace*{-10mm}
 ```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center', fig.show='asis'}
 library(png)
 library(grid)
-img <- readPNG("data/correr.png")
+img <- readPNG("data/correr2.png")
 grid.raster(img)
 ``` 
 \vspace*{-10mm}
@@ -92,23 +104,23 @@ grid.raster(img)
 \newpage
 El script contiene 3 secciones: 1) *Definición de parámetros*, 2) *Lectura de datos* y 3) *Generación de reporte*.
 
-La sección de *Definición de parámetros* contiene: el nombre del archivo (*data_ejemplo.csv*), la especie sobre la cual se está haciendo el reporte (*jurel*) y el tipo de esfuerzo que contiene la base de datos (*Viaje*).
+La sección de *Definición de parámetros* contiene: el nombre de los archivos (*"desembarque_esfuerzo.csv"*, *"desembarque.csv"*), la especie sobre la cual se está haciendo el reporte (*caballa*) y el tipo de esfuerzo que contiene la base de datos (*Capacidad de bodega*).
 
 \vspace*{-10mm}
 ```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center', fig.show='asis'}
 library(png)
 library(grid)
-img <- readPNG("data/ejemplo1.png")
+img <- readPNG("data/ejemplo1.1.png")
 grid.raster(img)
 ``` 
 \vspace*{-10mm}
 
-*Definición de parámetros* es la única sección del script que el usuario cambiará, dependiendo del nombre del archivo, de la especie y el tipo de esfuerzo con que se trabaje.
+*Definición de parámetros* es la única sección del script que el usuario cambiará, dependiendo del nombre de los archivos, de la especie y el tipo de esfuerzo con que se trabaje.
 \vspace*{-10mm}
 ```{r fig.width=6, fig.height=4, echo=FALSE, fig.align='center', fig.show='asis'}
 library(png)
 library(grid)
-img <- readPNG("data/ejemplo2.png")
+img <- readPNG("data/ejemplo2.1.png")
 grid.raster(img)
 ``` 
 \vspace*{-10mm}

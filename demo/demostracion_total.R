@@ -1,11 +1,14 @@
+require(RepSeg)
 
 # Definición de parámetros ------------------------------------------------
 
 # Dirección de archivo de entrada
-file <- "../data_ejemplo.csv"
+fileCPUE <- "../desembarque_esfuerzo.csv" #contiene la base de datos de desembarque y esfuerzo.
+
+fileDesembarque <- "../desembarque.csv" #contiene la base de datos de desembarque.
 
 # Indicar la especie de la que proviene la información
-sp   <- "caballa"
+sp   <- "merluza"
 
 # Indicar el tipo de esfuerzo usado
 tipoEsfuerzo <- "Capacidad de bodega"
@@ -13,14 +16,12 @@ tipoEsfuerzo <- "Capacidad de bodega"
 
 # Análisis ----------------------------------------------------------------
 
-require(RepSeg)
-
 #Lectura de datos
-desembarque <- getData(file = file, sp = sp, type = "landings", tipoEsfuerzo = tipoEsfuerzo)
+desembarque <- getData(file = fileDesembarque, sp = sp, type = "landings", tipoEsfuerzo = tipoEsfuerzo)
 
-esfuerzo   <- getData(file = file, sp = sp, type = "effort", tipoEsfuerzo = tipoEsfuerzo)
+esfuerzo    <- getData(file = fileCPUE, sp = sp, type = "effort", tipoEsfuerzo = tipoEsfuerzo)
 
-cpue       <- getData(file = file, sp = sp, type = "cpue", tipoEsfuerzo = tipoEsfuerzo)
+cpue        <- getData(file = fileCPUE, sp = sp, type = "cpue", tipoEsfuerzo = tipoEsfuerzo)
 
 # Generación del reporte
 makeReport(desembarque, esfuerzo, cpue, time = "month", cex.axis = 0.5)
